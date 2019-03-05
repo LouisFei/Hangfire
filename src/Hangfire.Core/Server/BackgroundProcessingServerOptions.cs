@@ -18,6 +18,9 @@ using System;
 
 namespace Hangfire.Server
 {
+    /// <summary>
+    /// 后台进程服务选项
+    /// </summary>
     public sealed class BackgroundProcessingServerOptions
     {
         public BackgroundProcessingServerOptions()

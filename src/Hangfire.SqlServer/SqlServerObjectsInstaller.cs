@@ -24,9 +24,15 @@ using Hangfire.Logging;
 
 namespace Hangfire.SqlServer
 {
+    /// <summary>
+    /// SqlServer对象安装器
+    /// </summary>
     public static class SqlServerObjectsInstaller
     {
         public static readonly int RequiredSchemaVersion = 5;
+        /// <summary>
+        /// 重试次数
+        /// </summary>
         private const int RetryAttempts = 3;
 
         public static void Install(DbConnection connection)
@@ -34,14 +40,22 @@ namespace Hangfire.SqlServer
             Install(connection, null);
         }
 
+        /// <summary>
+        /// 安装数据库存储表
+        /// </summary>
+        /// <param name="connection">数据库连接</param>
+        /// <param name="schema"></param>
         public static void Install(DbConnection connection, string schema)
         {
             if (connection == null) throw new ArgumentNullException(nameof(connection));
 
             var log = LogProvider.GetLogger(typeof(SqlServerObjectsInstaller));
 
-            log.Info("Start installing Hangfire SQL objects...");
+            //log.Info("Start installing Hangfire SQL objects...");
+            log.Info("开始安装Hangfire SQL对象…");
 
+            //创建SqlServer数据库及表的脚本，作为了程序集内嵌资源。
+            //下面的代码把它读取出来。
             var script = GetStringResource(
                 typeof(SqlServerObjectsInstaller).GetTypeInfo().Assembly, 
                 "Hangfire.SqlServer.Install.sql");
@@ -74,9 +88,17 @@ namespace Hangfire.SqlServer
             connection.Execute(script, commandTimeout: 0);
 #endif
 
-            log.Info("Hangfire SQL objects installed.");
+            //log.Info("Hangfire SQL objects installed.");
+            log.Info("安装了Hangfire SQL对象。");
         }
 
+        #region GetStringResource
+        /// <summary>
+        /// 获取程序集内嵌的文本资源，返回字符串形式。
+        /// </summary>
+        /// <param name="assembly">程序集</param>
+        /// <param name="resourceName">资源名</param>
+        /// <returns></returns>
         private static string GetStringResource(Assembly assembly, string resourceName)
         {
             using (var stream = assembly.GetManifestResourceStream(resourceName))
@@ -93,5 +115,6 @@ namespace Hangfire.SqlServer
                 }
             }
         }
+        #endregion
     }
 }

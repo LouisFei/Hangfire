@@ -20,21 +20,20 @@ namespace Hangfire.States
 {
     /// <summary>
     /// Provides methods that are required for a state changed filter.
+    /// 提供状态更改筛选器所需的方法。
     /// </summary>
     public interface IApplyStateFilter
     {
         /// <summary>
-        /// Called after the specified state was applied
-        /// to the job within the given transaction.
+        /// Called after the specified state was applied to the job within the given transaction.
+        /// 在将指定状态应用于给定事务中的作业之后调用。
         /// </summary>
-        void OnStateApplied(
-            ApplyStateContext context, IWriteOnlyTransaction transaction);
+        void OnStateApplied(ApplyStateContext context, IWriteOnlyTransaction transaction);
 
         /// <summary>
-        /// Called when the state with specified state was 
-        /// unapplied from the job within the given transaction.
+        /// Called when the state with specified state was unapplied from the job within the given transaction.
+        /// 当具有指定状态的状态未从给定事务中的作业应用时调用。
         /// </summary>
-        void OnStateUnapplied(
-            ApplyStateContext context, IWriteOnlyTransaction transaction);
+        void OnStateUnapplied(ApplyStateContext context, IWriteOnlyTransaction transaction);
     }
 }

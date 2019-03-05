@@ -24,9 +24,9 @@ using Hangfire.Storage;
 namespace Hangfire.States
 {
     /// <summary>
-    /// Defines the <i>intermediate</i> state of a background job when it is placed 
-    /// on a message queue to be processed by the <see cref="Server.Worker"/> 
-    /// background process <i>as soon as possible</i>.
+    /// 定义入队中状态
+    /// Defines the <i>intermediate</i> state of a background job when it is placed on a message queue to be processed by the <see cref="Server.Worker"/> background process <i>as soon as possible</i>.
+    /// 定义一个后台作业的中间状态，当它被放置在一个消息队列上，以便由工作后台进程尽快处理。
     /// </summary>
     /// <remarks>
     /// <para>Background job in <see cref="EnqueuedState"/> is referred as
@@ -65,6 +65,7 @@ namespace Hangfire.States
     {
         /// <summary>
         /// Represents the default queue name. This field is constant.
+        /// 默认的消息队列名称
         /// </summary>
         /// <remarks>
         /// The value of this field is <c>"default"</c>.
@@ -73,6 +74,7 @@ namespace Hangfire.States
 
         /// <summary>
         /// Represents the name of the <i>Enqueued</i> state. This field is read-only.
+        /// 表示排队状态的名称。该字段是只读的。
         /// </summary>
         /// <remarks>
         /// The value of this field is <c>"Enqueued"</c>.
@@ -82,8 +84,8 @@ namespace Hangfire.States
         private string _queue;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnqueuedState"/> class 
-        /// with the <see cref="DefaultQueue">default</see> queue name.
+        /// Initializes a new instance of the <see cref="EnqueuedState"/> class with the <see cref="DefaultQueue">default</see> queue name.
+        /// 使用默认队列名称初始化EnqueuedState类的新实例。
         /// </summary>
         public EnqueuedState()
             : this(DefaultQueue)
@@ -91,16 +93,18 @@ namespace Hangfire.States
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnqueuedState"/> class
-        /// with the specified queue name.
+        /// Initializes a new instance of the <see cref="EnqueuedState"/> class with the specified queue name.
+        /// 使用指定的队列名称初始化EnqueuedState类的新实例。
         /// </summary>
-        /// <param name="queue">The queue name to which a background job identifier will be added.</param>
+        /// <param name="queue">
+        /// The queue name to which a background job identifier will be added.
+        /// 将向其添加后台作业标识符的队列名称。
+        /// </param>
         /// 
         /// <seealso cref="Queue"/>
         /// 
         /// <exception cref="ArgumentNullException">
-        /// The <paramref name="queue"/> argument is <see langword="null"/>,  empty or consist only of 
-        /// white-space characters.
+        /// The <paramref name="queue"/> argument is <see langword="null"/>,  empty or consist only of white-space characters.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// The <paramref name="queue"/> argument is not a valid queue name.
@@ -114,11 +118,9 @@ namespace Hangfire.States
         }
 
         /// <summary>
-        /// Gets or sets a queue name to which a background job identifier
-        /// will be added.
+        /// Gets or sets a queue name to which a background job identifier will be added.
         /// </summary>
-        /// <value>A queue name that consist only of lowercase letters, digits and
-        /// underscores.</value>
+        /// <value>A queue name that consist only of lowercase letters, digits and underscores.</value>
         /// <remarks>
         /// <para>Queue name must consist only of lowercase letters, digits and
         /// underscores, other characters aren't permitted. Some examples:</para>
@@ -216,6 +218,11 @@ namespace Hangfire.States
             };
         }
 
+        /// <summary>
+        /// 验证队列名称是否合法
+        /// </summary>
+        /// <param name="parameterName"></param>
+        /// <param name="value"></param>
         internal static void ValidateQueueName([InvokerParameterName] string parameterName, string value)
         {
             if (String.IsNullOrWhiteSpace(value))

@@ -32,6 +32,9 @@ using Hangfire.Storage;
 
 namespace Hangfire.SqlServer
 {
+    /// <summary>
+    /// SqlServer连接
+    /// </summary>
     internal class SqlServerConnection : JobStorageConnection
     {
         private readonly SqlServerStorage _storage;
@@ -326,6 +329,11 @@ when not matched then insert ([Key], Field, Value) values (Source.[Key], Source.
             });
         }
 
+        /// <summary>
+        /// 更新服务器信息
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="context"></param>
         public override void AnnounceServer(string serverId, ServerContext context)
         {
             if (serverId == null) throw new ArgumentNullException(nameof(serverId));

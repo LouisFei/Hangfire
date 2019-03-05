@@ -21,10 +21,12 @@ using Hangfire.States;
 namespace Hangfire
 {
     /// <summary>
-    /// Represents attribute, that is used to determine queue name
-    /// for background jobs. It can be applied to the methods and classes. 
-    /// If the attribute is not applied neither to the method, nor the class, 
-    /// then default queue will be used.
+    /// Represents attribute, that is used to determine queue name for background jobs. 
+    /// 表示属性，该属性用于确定后台作业的队列名称。
+    /// It can be applied to the methods and classes. 
+    /// 它可以应用于方法和类。
+    /// If the attribute is not applied neither to the method, nor the class, then default queue will be used.
+    /// 如果属性既不应用于方法，也不应用于类，则将使用默认队列。
     /// </summary>
     /// 
     /// <example><![CDATA[
@@ -48,10 +50,10 @@ namespace Hangfire
     public sealed class QueueAttribute : JobFilterAttribute, IElectStateFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="QueueAttribute"/> class
-        /// using the specified queue name.
+        /// Initializes a new instance of the <see cref="QueueAttribute"/> class using the specified queue name.
+        /// 使用指定的队列名称初始化QueueAttribute类的新实例。
         /// </summary>
-        /// <param name="queue">Queue name.</param>
+        /// <param name="queue">Queue name.队列名称</param>
         public QueueAttribute(string queue)
         {
             Queue = queue;
@@ -60,6 +62,7 @@ namespace Hangfire
 
         /// <summary>
         /// Gets the queue name that will be used for background jobs.
+        /// 获取将用于后台作业的队列名称。
         /// </summary>
         public string Queue { get; }
 

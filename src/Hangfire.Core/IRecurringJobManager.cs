@@ -19,15 +19,34 @@ using Hangfire.Common;
 
 namespace Hangfire
 {
+    /// <summary>
+    /// 循环任务管理器接口
+    /// </summary>
     public interface IRecurringJobManager
     {
+        /// <summary>
+        /// 添加或修改任务
+        /// </summary>
+        /// <param name="recurringJobId"></param>
+        /// <param name="job"></param>
+        /// <param name="cronExpression"></param>
+        /// <param name="options"></param>
         void AddOrUpdate(
             [NotNull] string recurringJobId, 
             [NotNull] Job job, 
             [NotNull] string cronExpression, 
             [NotNull] RecurringJobOptions options);
 
+        /// <summary>
+        /// 触发任务
+        /// </summary>
+        /// <param name="recurringJobId"></param>
         void Trigger([NotNull] string recurringJobId);
+
+        /// <summary>
+        /// 删除任务（如果任务存在的话）
+        /// </summary>
+        /// <param name="recurringJobId"></param>
         void RemoveIfExists([NotNull] string recurringJobId);
     }
 }

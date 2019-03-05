@@ -20,9 +20,18 @@ using Hangfire.Common;
 
 namespace Hangfire
 {
+    /// <summary>
+    /// 后台作业
+    /// </summary>
     partial class BackgroundJob
     {
         /// <exclude />
+        /// <summary>
+        /// 实例化
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="job"></param>
+        /// <param name="createdAt"></param>
         public BackgroundJob([NotNull] string id, [CanBeNull] Job job, DateTime createdAt)
         {
             if (id == null) throw new ArgumentNullException(nameof(id));

@@ -21,6 +21,9 @@ using Hangfire.Storage;
 namespace Hangfire.States
 {
 #pragma warning disable 618
+    /// <summary>
+    /// 应用状态上下文
+    /// </summary>
     public class ApplyStateContext : StateContext
 #pragma warning restore 618
     {
@@ -31,6 +34,15 @@ namespace Hangfire.States
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storage"></param>
+        /// <param name="connection"></param>
+        /// <param name="transaction"></param>
+        /// <param name="backgroundJob"></param>
+        /// <param name="newState">新状态</param>
+        /// <param name="oldStateName"></param>
         public ApplyStateContext(
             [NotNull] JobStorage storage,
             [NotNull] IStorageConnection connection,

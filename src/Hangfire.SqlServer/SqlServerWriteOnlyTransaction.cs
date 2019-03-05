@@ -1,5 +1,5 @@
-// This file is part of Hangfire.
-// Copyright � 2013-2014 Sergey Odinokov.
+﻿// This file is part of Hangfire.
+// Copyright ?2013-2014 Sergey Odinokov.
 // 
 // Hangfire is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as 
@@ -31,16 +31,28 @@ using Hangfire.Storage;
 
 namespace Hangfire.SqlServer
 {
+    /// <summary>
+    /// SqlServer只写事务
+    /// </summary>
     internal class SqlServerWriteOnlyTransaction : JobStorageTransaction
     {
         private readonly Queue<Action<DbConnection, DbTransaction>> _queueCommandQueue
             = new Queue<Action<DbConnection, DbTransaction>>();
+
+        /// <summary>
+        /// 命令队列
+        /// </summary>
         private readonly Queue<Tuple<string, SqlParameter[]>> _commandQueue
             = new Queue<Tuple<string, SqlParameter[]>>();
+
         private readonly Queue<Action> _afterCommitCommandQueue = new Queue<Action>();
 
         private readonly SortedSet<string> _lockedResources = new SortedSet<string>();
         private readonly SqlServerStorage _storage;
+
+        /// <summary>
+        /// 数据库连接方法
+        /// </summary>
         private readonly Func<DbConnection> _dedicatedConnectionFunc;
 
         public SqlServerWriteOnlyTransaction([NotNull] SqlServerStorage storage, Func<DbConnection> dedicatedConnectionFunc)
@@ -51,6 +63,9 @@ namespace Hangfire.SqlServer
             _dedicatedConnectionFunc = dedicatedConnectionFunc;
         }
 
+        /// <summary>
+        /// 提交
+        /// </summary>
         public override void Commit()
         {
             _storage.UseTransaction(_dedicatedConnectionFunc(), (connection, transaction) =>
@@ -91,6 +106,11 @@ namespace Hangfire.SqlServer
             }
         }
 
+        /// <summary>
+        /// 设置作业过期时间
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <param name="expireIn">多久之后过期</param>
         public override void ExpireJob(string jobId, TimeSpan expireIn)
         {
             QueueCommand(
@@ -99,11 +119,20 @@ namespace Hangfire.SqlServer
                 new SqlParameter("@id", long.Parse(jobId)));
         }
 
+        /// <summary>
+        /// 把命令加入到队列
+        /// </summary>
+        /// <param name="commandText"></param>
+        /// <param name="parameters"></param>
         private void QueueCommand(string commandText, params SqlParameter[] parameters)
         {
             _commandQueue.Enqueue(new Tuple<string, SqlParameter[]>(commandText, parameters));
         }
 
+        /// <summary>
+        /// 保持作业继续？？
+        /// </summary>
+        /// <param name="jobId"></param>
         public override void PersistJob(string jobId)
         {
             QueueCommand(
@@ -111,6 +140,11 @@ namespace Hangfire.SqlServer
                 new SqlParameter("@id", long.Parse(jobId)));
         }
 
+        /// <summary>
+        /// 设置作业状态
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <param name="state"></param>
         public override void SetJobState(string jobId, IState state)
         {
             string addAndSetStateSql = 
@@ -127,6 +161,11 @@ update [{_storage.SchemaName}].Job set StateId = SCOPE_IDENTITY(), StateName = @
                 new SqlParameter("@id", long.Parse(jobId)));
         }
 
+        /// <summary>
+        /// 添加作业状态
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <param name="state"></param>
         public override void AddJobState(string jobId, IState state)
         {
             string addStateSql =

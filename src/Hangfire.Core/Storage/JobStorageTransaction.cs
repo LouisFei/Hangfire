@@ -21,6 +21,9 @@ using Hangfire.States;
 
 namespace Hangfire.Storage
 {
+    /// <summary>
+    /// 作业存储事务抽象基类
+    /// </summary>
     public abstract class JobStorageTransaction : IWriteOnlyTransaction
     {
         public virtual void Dispose()

@@ -23,8 +23,8 @@ using Hangfire.States;
 namespace Hangfire
 {
     /// <summary>
-    /// Provides methods for creating all the types of background jobs and 
-    /// changing their states.
+    /// Provides methods for creating all the types of background jobs and changing their states.
+    /// 提供创建所有后台作业类型并更改其状态的方法。
     /// </summary>
     /// 
     /// <remarks>
@@ -35,10 +35,11 @@ namespace Hangfire
     {
         /// <summary>
         /// Creates a new background job in a specified state.
+        /// 在指定状态下创建新的后台作业。
         /// </summary>
         /// 
-        /// <param name="job">Job that should be processed in background.</param>
-        /// <param name="state">Initial state for a background job.</param>
+        /// <param name="job">Job that should be processed in background.应该在后台处理的作业。</param>
+        /// <param name="state">Initial state for a background job.后台作业的初始状态。</param>
         /// <returns>Unique identifier of a created background job <i>-or-</i> 
         ///  <see langword="null"/>, if it was not created.</returns>
         /// 
@@ -47,27 +48,33 @@ namespace Hangfire
         /// <exception cref="BackgroundJobClientException">Creation failed due to an exception.</exception>
         /// 
         /// <remarks>
-        /// <para>The interface allows implementations to return <see langword="null"/> 
-        /// value for this method when background job creation has been canceled
-        /// by an implementation under the normal circumstances (not due to an
-        /// exception). For example, the <see cref="CreatingContext"/> class
-        /// contains the <see cref="CreatingContext.Canceled"/> property that
-        /// may be used by a client filter to cancel a background job creation.
+        /// <para>
+        /// The interface allows implementations to return <see langword="null"/> value for this method 
+        /// 该接口允许实现在正常情况下(不是由于异常)实现取消后台作业创建时为该方法返回null值。
+        /// when background job creation has been canceled by an implementation under the normal circumstances (not due to an exception). 
+        /// 
+        /// For example, the <see cref="CreatingContext"/> class contains the <see cref="CreatingContext.Canceled"/> property 
+        /// 例如，CreatingContext类包含可被客户端筛选器用于取消后台作业创建的cancel属性。
+        /// that may be used by a client filter to cancel a background job creation.
         /// </para>
         /// 
-        /// <para>The interface allows implementations to create a background 
-        /// job in a state other than specified. The given state instance also 
-        /// may be modified. For example, <see cref="ElectStateContext"/> class
-        /// contains public setter for the <see cref="ElectStateContext.CandidateState"/>
-        /// property allowing to choose completely different state by state
-        /// election filters.</para>
+        /// <para>
+        /// The interface allows implementations to create a background job in a state other than specified. 
+        /// 该接口允许实现在指定状态之外创建后台作业。
+        /// The given state instance also  may be modified. 
+        /// 还可以修改给定的状态实例。
+        /// For example, <see cref="ElectStateContext"/> class contains public setter 
+        /// 例如，ElectStateContext类包含CandidateState属性的公共setter，允许按状态选择完全不同的选举过滤器。
+        /// for the <see cref="ElectStateContext.CandidateState"/> property allowing to choose completely different state by state election filters.
+        /// 
+        /// </para>
         /// </remarks>
         [CanBeNull]
         string Create([NotNull] Job job, [NotNull] IState state);
 
         /// <summary>
-        /// Attempts to change a state of a background job with a given
-        /// identifier to a specified one.
+        /// Attempts to change a state of a background job with a given identifier to a specified one.
+        /// 试图将具有给定标识符的后台作业状态更改为指定标识符的后台作业状态。
         /// </summary>
         /// 
         /// <param name="jobId">Identifier of background job, whose state should be changed.</param>

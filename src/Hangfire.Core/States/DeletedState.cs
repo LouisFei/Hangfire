@@ -22,8 +22,8 @@ using Hangfire.Storage;
 namespace Hangfire.States
 {
     /// <summary>
-    /// Defines the <i>final</i> state of a background job when nobody
-    /// is interested whether it was performed or not.
+    /// Defines the <i>final</i> state of a background job when nobody is interested whether it was performed or not.
+    /// 定义后台作业的<i>final</i>状态，当没有人对它是否执行感兴趣时。
     /// </summary>
     /// <remarks>
     /// <para>Deleted state is used when you are not interested in a processing

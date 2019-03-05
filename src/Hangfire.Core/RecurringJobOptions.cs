@@ -20,6 +20,9 @@ using Hangfire.States;
 
 namespace Hangfire
 {
+    /// <summary>
+    /// 循环作业选项
+    /// </summary>
     public class RecurringJobOptions
     {
         private TimeZoneInfo _timeZone;
@@ -31,6 +34,9 @@ namespace Hangfire
             QueueName = EnqueuedState.DefaultQueue;
         }
 
+        /// <summary>
+        /// 时区
+        /// </summary>
         [NotNull]
         public TimeZoneInfo TimeZone
         {
@@ -43,6 +49,9 @@ namespace Hangfire
             }
         }
 
+        /// <summary>
+        /// 队列名称（默认是default）
+        /// </summary>
         [NotNull]
         public string QueueName
         {

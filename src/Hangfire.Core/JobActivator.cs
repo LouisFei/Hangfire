@@ -20,13 +20,16 @@ using Hangfire.Annotations;
 
 namespace Hangfire
 {
+    /// <summary>
+    /// 作业激活器
+    /// </summary>
     public class JobActivator
     {
         private static JobActivator _current = new JobActivator();
 
         /// <summary>
-        /// Gets or sets the current <see cref="JobActivator"/> instance 
-        /// that will be used to activate jobs during performance.
+        /// Gets or sets the current <see cref="JobActivator"/> instance that will be used to activate jobs during performance.
+        /// 获取或设置将在性能期间用于激活作业的当前JobActivator实例。
         /// </summary>
         public static JobActivator Current
         {

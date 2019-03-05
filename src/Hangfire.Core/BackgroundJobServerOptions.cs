@@ -1,5 +1,5 @@
-// This file is part of Hangfire.
-// Copyright � 2013-2014 Sergey Odinokov.
+﻿// This file is part of Hangfire.
+// Copyright ?2013-2014 Sergey Odinokov.
 // 
 // Hangfire is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as 
@@ -22,9 +22,15 @@ using Hangfire.States;
 
 namespace Hangfire
 {
+    /// <summary>
+    /// 后台作业服务设置
+    /// </summary>
     public class BackgroundJobServerOptions
     {
         // https://github.com/HangfireIO/Hangfire/issues/246
+        /// <summary>
+        /// 默认的最大工作者数量
+        /// </summary>
         private const int MaxDefaultWorkerCount = 20;
 
         private int _workerCount;
@@ -57,6 +63,9 @@ namespace Hangfire
             }
         }
 
+        /// <summary>
+        /// 队列名称
+        /// </summary>
         public string[] Queues
         {
             get { return _queues; }
@@ -69,10 +78,25 @@ namespace Hangfire
             }
         }
 
+        /// <summary>
+        /// 关闭超时
+        /// </summary>
         public TimeSpan ShutdownTimeout { get; set; }
+        /// <summary>
+        /// 计划轮询间隔
+        /// </summary>
         public TimeSpan SchedulePollingInterval { get; set; }
+        /// <summary>
+        /// 心跳间隔
+        /// </summary>
         public TimeSpan HeartbeatInterval { get; set; }
+        /// <summary>
+        /// 服务器超时
+        /// </summary>
         public TimeSpan ServerTimeout { get; set; }
+        /// <summary>
+        /// 服务器检查间隔
+        /// </summary>
         public TimeSpan ServerCheckInterval { get; set; }
 
         [Obsolete("Please use `ServerTimeout` or `ServerCheckInterval` options instead. Will be removed in 2.0.0.")]

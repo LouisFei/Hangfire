@@ -26,8 +26,9 @@ using NCrontab;
 namespace Hangfire
 {
     /// <summary>
-    /// Represents a recurring job manager that allows to create, update
-    /// or delete recurring jobs.
+    /// 循环任务管理器
+    /// Represents a recurring job manager that allows to create, update or delete recurring jobs.
+    /// 表示允许创建、更新或删除重复作业的重复作业管理器。
     /// </summary>
     public class RecurringJobManager : IRecurringJobManager
     {
@@ -44,6 +45,11 @@ namespace Hangfire
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storage">任务仓库</param>
+        /// <param name="factory">后台任务工厂</param>
         public RecurringJobManager([NotNull] JobStorage storage, [NotNull] IBackgroundJobFactory factory)
         {
             if (storage == null) throw new ArgumentNullException(nameof(storage));
@@ -53,6 +59,13 @@ namespace Hangfire
             _factory = factory;
         }
 
+        /// <summary>
+        /// 添加或修改作业
+        /// </summary>
+        /// <param name="recurringJobId">作业标识符</param>
+        /// <param name="job">作业</param>
+        /// <param name="cronExpression">执行计划</param>
+        /// <param name="options">循环作业选项</param>
         public void AddOrUpdate(string recurringJobId, Job job, string cronExpression, RecurringJobOptions options)
         {
             if (recurringJobId == null) throw new ArgumentNullException(nameof(recurringJobId));
@@ -60,6 +73,7 @@ namespace Hangfire
             if (cronExpression == null) throw new ArgumentNullException(nameof(cronExpression));
             if (options == null) throw new ArgumentNullException(nameof(options));
             
+            //验证执行计划Cron表达式
             ValidateCronExpression(cronExpression);
 
             using (var connection = _storage.GetConnection())
@@ -131,6 +145,13 @@ namespace Hangfire
             }
         }
 
+        /// <summary>
+        /// 验证Cron表达式是否合法
+        /// </summary>
+        /// <remarks>
+        /// https://github.com/atifaziz/NCrontab
+        /// </remarks>
+        /// <param name="cronExpression"></param>
         private static void ValidateCronExpression(string cronExpression)
         {
             try

@@ -24,11 +24,17 @@ using Hangfire.Storage;
 
 namespace Hangfire
 {
+    /// <summary>
+    /// Job仓库
+    /// </summary>
     public abstract class JobStorage
     {
         private static readonly object LockObject = new object();
         private static JobStorage _current;
 
+        /// <summary>
+        /// 获取或设置当前的Job仓库模式
+        /// </summary>
         public static JobStorage Current
         {
             get

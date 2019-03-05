@@ -16,17 +16,38 @@ namespace ConsoleSample
         {
         }
 
+        /// <summary>
+        /// 可取消的异步任务
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task Async(CancellationToken cancellationToken)
         {
+            //创建异步产生当前上下文的等待任务。
+            //等待时，上下文将异步转换回等待时的当前上下文。
+            //当任务比较耗时时，中断以分割成多个小的任务片断执行。
             await Task.Yield();
-            await Task.Delay(TimeSpan.FromDays(1), cancellationToken);
+
+            //创建一个在指定的时间间隔后完成的可取消任务。
+            await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
         }
 
-        [Queue("critical")]
+        /*
+            设置任务队列
+            对于非周期任务，只需要在执行的方法添加Queue特性就能指定该任务让特定的队列服务器处理。
+            而周期任务，则需要先声明。
+        */
+        /// <summary>
+        /// 
+        /// </summary>
+        [Queue("critical")] //设定队列名称
         public void EmptyCritical()
         {
         }
 
+        /// <summary>
+        /// 一个会报错的任务，设定了重试次数，和超时时间。
+        /// </summary>
         [AutomaticRetry(Attempts = 0), LatencyTimeout(30)]
         public void Error()
         {

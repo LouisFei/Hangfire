@@ -69,6 +69,7 @@ namespace Hangfire.Common
             {
                 try
                 {
+                    //将事件的状态设置为有信号状态，允许一个或多个等待的线程继续。
                     ((ManualResetEvent)state).Set();
                 }
                 catch (ObjectDisposedException)

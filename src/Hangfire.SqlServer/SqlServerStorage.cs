@@ -1,5 +1,5 @@
-// This file is part of Hangfire.
-// Copyright � 2013-2014 Sergey Odinokov.
+﻿// This file is part of Hangfire.
+// Copyright ?2013-2014 Sergey Odinokov.
 // 
 // Hangfire is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as 
@@ -35,12 +35,28 @@ using Hangfire.Storage;
 
 namespace Hangfire.SqlServer
 {
+    /// <summary>
+    /// SqlServer仓库
+    /// </summary>
     public class SqlServerStorage : JobStorage
     {
+        /// <summary>
+        /// 已存在的数据库连接
+        /// </summary>
         private readonly DbConnection _existingConnection;
+        /// <summary>
+        /// 数据仓库设置
+        /// </summary>
         private readonly SqlServerStorageOptions _options;
+        /// <summary>
+        /// 数据库连接字符串
+        /// </summary>
         private readonly string _connectionString;
 
+        /// <summary>
+        /// 创建SqlServer仓库实例
+        /// </summary>
+        /// <param name="nameOrConnectionString">数据库连接字符串或连接配置名</param>
         public SqlServerStorage(string nameOrConnectionString)
             : this(nameOrConnectionString, new SqlServerStorageOptions())
         {
@@ -48,10 +64,14 @@ namespace Hangfire.SqlServer
 
         /// <summary>
         /// Initializes SqlServerStorage from the provided SqlServerStorageOptions and either the provided connection
-        /// string or the connection string with provided name pulled from the application config file.       
+        /// string or the connection string with provided name pulled from the application config file.
+        /// 从提供的SqlServerStorageOptions和从应用程序配置文件中提取的提供的连接字符串或具有提供的名称的连接字符串初始化SqlServerStorage。
         /// </summary>
-        /// <param name="nameOrConnectionString">Either a SQL Server connection string or the name of 
-        /// a SQL Server connection string located in the connectionStrings node in the application config</param>
+        /// <param name="nameOrConnectionString">
+        /// Either a SQL Server connection string or the name of 
+        /// a SQL Server connection string located in the connectionStrings node in the application config
+        /// 要么是SQL Server连接字符串，要么是位于应用程序配置中的connectionStrings节点中的SQL Server连接字符串的名称
+        /// </param>
         /// <param name="options"></param>
         /// <exception cref="ArgumentNullException"><paramref name="nameOrConnectionString"/> argument is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="options"/> argument is null.</exception>
@@ -122,8 +142,10 @@ namespace Hangfire.SqlServer
 
         public override void WriteOptionsToLog(ILog logger)
         {
-            logger.Info("Using the following options for SQL Server job storage:");
-            logger.Info($"    Queue poll interval: {_options.QueuePollInterval}.");
+            //logger.Info("Using the following options for SQL Server job storage:");
+            logger.Info("对SQL Server作业存储使用以下选项:");
+            //logger.Info($"    Queue poll interval: {_options.QueuePollInterval}.");
+            logger.Info($"    排队轮询间隔: {_options.QueuePollInterval}.");
         }
 
         public override string ToString()
@@ -169,6 +191,11 @@ namespace Hangfire.SqlServer
             }
         }
 
+        /// <summary>
+        /// 确保数据库已连接
+        /// </summary>
+        /// <param name="dedicatedConnection"></param>
+        /// <param name="action"></param>
         internal void UseConnection(DbConnection dedicatedConnection, [InstantHandle] Action<DbConnection> action)
         {
             UseConnection(dedicatedConnection, connection =>
@@ -178,6 +205,13 @@ namespace Hangfire.SqlServer
             });
         }
 
+        /// <summary>
+        /// 确保数据库已连接
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dedicatedConnection"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
         internal T UseConnection<T>(DbConnection dedicatedConnection, [InstantHandle] Func<DbConnection, T> func)
         {
             DbConnection connection = null;
@@ -196,6 +230,11 @@ namespace Hangfire.SqlServer
             }
         }
 
+        /// <summary>
+        /// 使用事务
+        /// </summary>
+        /// <param name="dedicatedConnection"></param>
+        /// <param name="action"></param>
         internal void UseTransaction(DbConnection dedicatedConnection, [InstantHandle] Action<DbConnection, DbTransaction> action)
         {
             UseTransaction(dedicatedConnection, (connection, transaction) =>
@@ -237,6 +276,10 @@ namespace Hangfire.SqlServer
 #endif
         }
 
+        /// <summary>
+        /// 创建并打开数据库连接
+        /// </summary>
+        /// <returns></returns>
         internal DbConnection CreateAndOpenConnection()
         {
             var connection = _existingConnection ?? new SqlConnection(_connectionString);
@@ -249,11 +292,20 @@ namespace Hangfire.SqlServer
             return connection;
         }
 
+        /// <summary>
+        /// 判断是否是已存在的数据库连接
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <returns></returns>
         internal bool IsExistingConnection(IDbConnection connection)
         {
             return connection != null && ReferenceEquals(connection, _existingConnection);
         }
 
+        /// <summary>
+        /// 释放非已存在的数据库连接
+        /// </summary>
+        /// <param name="connection"></param>
         internal void ReleaseConnection(IDbConnection connection)
         {
             if (connection != null && !IsExistingConnection(connection))
@@ -262,6 +314,9 @@ namespace Hangfire.SqlServer
             }
         }
 
+        /// <summary>
+        /// 数据库连接初始化
+        /// </summary>
         private void Initialize()
         {
             if (_options.PrepareSchemaIfNecessary)
@@ -281,6 +336,11 @@ namespace Hangfire.SqlServer
             QueueProviders = new PersistentJobQueueProviderCollection(defaultQueueProvider);
         }
 
+        /// <summary>
+        /// 获得数据库连接字符串
+        /// </summary>
+        /// <param name="nameOrConnectionString"></param>
+        /// <returns></returns>
         private string GetConnectionString(string nameOrConnectionString)
         {
 #if NETFULL
@@ -302,11 +362,21 @@ namespace Hangfire.SqlServer
         }
 
 #if NETFULL
+        /// <summary>
+        /// 判断是否是数据库连接字符串
+        /// </summary>
+        /// <param name="nameOrConnectionString"></param>
+        /// <returns></returns>
         private bool IsConnectionString(string nameOrConnectionString)
         {
             return nameOrConnectionString.Contains(";");
         }
 
+        /// <summary>
+        /// 判断是否是数据库连接配置名
+        /// </summary>
+        /// <param name="connectionStringName"></param>
+        /// <returns></returns>
         private bool IsConnectionStringInConfiguration(string connectionStringName)
         {
             var connectionStringSetting = ConfigurationManager.ConnectionStrings[connectionStringName];
@@ -314,6 +384,11 @@ namespace Hangfire.SqlServer
             return connectionStringSetting != null;
         }
 
+        /// <summary>
+        /// 创建事务
+        /// </summary>
+        /// <param name="isolationLevel"></param>
+        /// <returns></returns>
         private TransactionScope CreateTransaction(IsolationLevel? isolationLevel)
         {
             return isolationLevel != null

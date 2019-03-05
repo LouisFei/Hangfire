@@ -16,6 +16,9 @@
 
 namespace Hangfire.Server
 {
+    /// <summary>
+    /// 服务器上下文
+    /// </summary>
     public class ServerContext
     {
         public ServerContext()
@@ -24,7 +27,14 @@ namespace Hangfire.Server
             WorkerCount = -1;
         }
 
+        /// <summary>
+        /// 工作者数量
+        /// </summary>
         public int WorkerCount { get; set; }
+
+        /// <summary>
+        /// 队列
+        /// </summary>
         public string[] Queues { get; set; }
     }
 }

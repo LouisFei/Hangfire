@@ -26,19 +26,26 @@ using Hangfire.Storage;
 namespace Hangfire.SqlServer
 {
 #pragma warning disable 618
+    /// <summary>
+    /// 有效期管理器
+    /// </summary>
     internal class ExpirationManager : IServerComponent
 #pragma warning restore 618
     {
         private const string DistributedLockKey = "locks:expirationmanager";
         private static readonly TimeSpan DefaultLockTimeout = TimeSpan.FromMinutes(5);
-        
-        // This value should be high enough to optimize the deletion as much, as possible,
-        // reducing the number of queries. But low enough to cause lock escalations (it
-        // appears, when ~5000 locks were taken, but this number is a subject of version).
-        // Note, that lock escalation may also happen during the cascade deletions for
-        // State (3-5 rows/job usually) and JobParameters (2-3 rows/job usually) tables.
+
+        // This value should be high enough to optimize the deletion as much, as possible, reducing the number of queries. 
+        // 这个值应该足够高，可以尽可能地优化删除操作，减少查询的数量。
+        // But low enough to cause lock escalations (it appears, when ~5000 locks were taken, but this number is a subject of version).
+        // 但是低到足以导致锁升级(当使用了~5000个锁时，会出现这种情况，但是这个数字是版本的主题)。
+        // Note, that lock escalation may also happen during the cascade deletions for State (3-5 rows/job usually) and JobParameters (2-3 rows/job usually) tables.
+        // 注意，锁升级也可能发生在状态(通常为3-5行/作业)和JobParameters(通常为2-3行/作业)表的级联删除期间。
         private const int NumberOfRecordsInSinglePass = 1000;
         
+        /// <summary>
+        /// 处理的表？
+        /// </summary>
         private static readonly string[] ProcessedTables =
         {
             "AggregatedCounter",
@@ -50,8 +57,16 @@ namespace Hangfire.SqlServer
 
         private readonly ILog _logger = LogProvider.For<ExpirationManager>();
         private readonly SqlServerStorage _storage;
+        /// <summary>
+        /// 检查间隔/频率
+        /// </summary>
         private readonly TimeSpan _checkInterval;
 
+        /// <summary>
+        /// 返回过期管理器实例
+        /// </summary>
+        /// <param name="storage">SqlServer仓库</param>
+        /// <param name="checkInterval">检查时间间隔/频率</param>
         public ExpirationManager(SqlServerStorage storage, TimeSpan checkInterval)
         {
             if (storage == null) throw new ArgumentNullException(nameof(storage));
@@ -64,7 +79,8 @@ namespace Hangfire.SqlServer
         {
             foreach (var table in ProcessedTables)
             {
-                _logger.Debug($"Removing outdated records from the '{table}' table...");
+                //_logger.Debug($"Removing outdated records from the '{table}' table...");
+                _logger.Debug($"从表'{table}'中移除过期的记录...");
 
                 UseConnectionDistributedLock(_storage, connection =>
                 {
@@ -82,7 +98,8 @@ namespace Hangfire.SqlServer
                     } while (affected == NumberOfRecordsInSinglePass);
                 });
 
-                _logger.Trace($"Outdated records removed from the '{table}' table.");
+                //_logger.Trace($"Outdated records removed from the '{table}' table.");
+                _logger.Trace($"从'{table}'表中删除过时的记录。");
             }
 
             cancellationToken.Wait(_checkInterval);
@@ -93,6 +110,11 @@ namespace Hangfire.SqlServer
             return GetType().ToString();
         }
 
+        /// <summary>
+        /// 使用连接分布式锁？？
+        /// </summary>
+        /// <param name="storage">SqlServer仓库</param>
+        /// <param name="action">动作</param>
         private void UseConnectionDistributedLock(SqlServerStorage storage, Action<DbConnection> action)
         {
             try

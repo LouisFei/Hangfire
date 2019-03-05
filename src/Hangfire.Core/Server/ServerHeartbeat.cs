@@ -18,8 +18,14 @@ using System;
 
 namespace Hangfire.Server
 {
+    /// <summary>
+    /// 服务心跳
+    /// </summary>
     internal class ServerHeartbeat : IBackgroundProcess
     {
+        /// <summary>
+        /// 默认的心跳间隔，30秒
+        /// </summary>
         public static readonly TimeSpan DefaultHeartbeatInterval = TimeSpan.FromSeconds(30);
 
         private readonly TimeSpan _heartbeatInterval;

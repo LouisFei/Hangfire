@@ -1,5 +1,5 @@
-// This file is part of Hangfire.
-// Copyright � 2013-2014 Sergey Odinokov.
+﻿// This file is part of Hangfire.
+// Copyright ?2013-2014 Sergey Odinokov.
 // 
 // Hangfire is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as 
@@ -23,6 +23,9 @@ using Hangfire.Server;
 
 namespace Hangfire.Storage
 {
+    /// <summary>
+    /// 仓库连接接口
+    /// </summary>
     public interface IStorageConnection : IDisposable
     {
         IWriteOnlyTransaction CreateWriteTransaction();
@@ -47,7 +50,13 @@ namespace Hangfire.Storage
 
         void AnnounceServer(string serverId, ServerContext context);
         void RemoveServer(string serverId);
+
+        /// <summary>
+        /// 心跳
+        /// </summary>
+        /// <param name="serverId"></param>
         void Heartbeat(string serverId);
+
         int RemoveTimedOutServers(TimeSpan timeOut);
 
         // Set operations
@@ -61,6 +70,11 @@ namespace Hangfire.Storage
 
         void SetRangeInHash([NotNull] string key, [NotNull] IEnumerable<KeyValuePair<string, string>> keyValuePairs);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         [CanBeNull]
         Dictionary<string, string> GetAllEntriesFromHash([NotNull] string key);
     }

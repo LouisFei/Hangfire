@@ -70,15 +70,21 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Creates a background job based on a specified lambda expression 
-        /// and places it into its actual queue. 
-        /// Please, see the <see cref="QueueAttribute"/> to learn how to 
-        /// place the job on a non-default queue.
+        /// Creates a background job based on a specified lambda expression and places it into its actual queue. 
+        /// 基于指定的lambda表达式创建后台作业，并将其放置到实际队列中。
+        /// Please, see the <see cref="QueueAttribute"/> to learn how to place the job on a non-default queue.
+        /// 请参阅QueueAttribute了解如何将作业放在非默认队列上。
         /// </summary>
         /// 
-        /// <typeparam name="T">Type whose method will be invoked during job processing.</typeparam>
-        /// <param name="client">A job client instance.</param>
-        /// <param name="methodCall">Instance method call expression that will be marshalled to the Server.</param>
+        /// <typeparam name="T">
+        /// Type whose method will be invoked during job processing.
+        /// 类型，其方法将在作业处理期间调用。
+        /// </typeparam>
+        /// <param name="client">A job client instance.作业客户端实例。</param>
+        /// <param name="methodCall">
+        /// Instance method call expression that will be marshalled to the Server.
+        /// 将编组到服务器的实例方法调用表达式。
+        /// </param>
         /// <returns>Unique identifier of the created job.</returns>
         public static string Enqueue<T>(
             [NotNull] this IBackgroundJobClient client, 
@@ -182,15 +188,30 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Creates a new background job based on a specified instance method
-        /// call expression and schedules it to be enqueued after a given delay.
+        /// Creates a new background job based on a specified instance method call expression and schedules it to be enqueued after a given delay.
+        /// 基于指定的实例方法调用表达式创建一个新的后台作业，并将其安排在给定的延迟后排队。
         /// </summary>
         /// 
-        /// <typeparam name="T">Type whose method will be invoked during job processing.</typeparam>
-        /// <param name="client">A job client instance.</param>
-        /// <param name="methodCall">Instance method call expression that will be marshalled to the Server.</param>
-        /// <param name="delay">Delay, after which the job will be enqueued.</param>
-        /// <returns>Unique identifier of the created job.</returns>
+        /// <typeparam name="T">
+        /// Type whose method will be invoked during job processing.
+        /// 类型，其方法将在作业处理期间调用。
+        /// </typeparam>
+        /// <param name="client">
+        /// A job client instance.
+        /// 作业客户端实例。
+        /// </param>
+        /// <param name="methodCall">
+        /// Instance method call expression that will be marshalled to the Server.
+        /// 将编组到服务器的实例方法调用表达式。
+        /// </param>
+        /// <param name="delay">
+        /// Delay, after which the job will be enqueued.
+        /// 延迟，在此之后作业将进入队列。
+        /// </param>
+        /// <returns>
+        /// Unique identifier of the created job.
+        /// 所创建作业的唯一标识符。
+        /// </returns>
         public static string Schedule<T>(
             [NotNull] this IBackgroundJobClient client, 
             [NotNull, InstantHandle] Expression<Action<T>> methodCall, 
@@ -261,6 +282,7 @@ namespace Hangfire
 
         /// <summary>
         /// Creates a new background job based on a specified lambda expression in a given state.
+        /// 基于给定状态下的指定lambda表达式创建新的后台作业。
         /// </summary>
         /// <param name="client">A job client instance.</param>
         /// <param name="methodCall">Static method call expression that will be marshalled to the Server.</param>
@@ -295,12 +317,28 @@ namespace Hangfire
 
         /// <summary>
         /// Creates a new background job based on a specified instance method in a given state.
+        /// 基于给定状态中的指定lambda表达式创建新的后台作业。
         /// </summary> 
-        /// <typeparam name="T">Type whose method will be invoked during job processing.</typeparam>
-        /// <param name="client">A job client instance.</param>
-        /// <param name="methodCall">Instance method call expression that will be marshalled to the Server.</param>
-        /// <param name="state">Initial state of a job.</param>
-        /// <returns>Unique identifier of the created job.</returns>
+        /// <typeparam name="T">
+        /// Type whose method will be invoked during job processing.
+        /// 类型，其方法将在作业处理期间调用。
+        /// </typeparam>
+        /// <param name="client">
+        /// A job client instance.
+        /// 作业客户端实例。
+        /// </param>
+        /// <param name="methodCall">
+        /// Instance method call expression that will be marshalled to the Server.
+        /// 将编组到服务器的实例方法调用表达式。
+        /// </param>
+        /// <param name="state">
+        /// Initial state of a job.
+        /// 作业的初始状态。
+        /// </param>
+        /// <returns>
+        /// Unique identifier of the created job.
+        /// 所创建作业的唯一标识符。
+        /// </returns>
         public static string Create<T>(
             [NotNull] this IBackgroundJobClient client,
             [NotNull, InstantHandle] Expression<Action<T>> methodCall,

@@ -23,8 +23,14 @@ using Hangfire.Storage;
 
 namespace Hangfire.States
 {
+    /// <summary>
+    /// 后台作业状态改变器
+    /// </summary>
     public class BackgroundJobStateChanger : IBackgroundJobStateChanger
     {
+        /// <summary>
+        /// 作业锁超时,15分钟。
+        /// </summary>
         private static readonly TimeSpan JobLockTimeout = TimeSpan.FromMinutes(15);
 
         private readonly IStateMachine _stateMachine;

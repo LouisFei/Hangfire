@@ -30,6 +30,11 @@ namespace Hangfire.Common
             _serializerSettings = setting;
         }
 
+        /// <summary>
+        /// 序列化为json字符串
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string ToJson(object value)
         {
             return value != null
@@ -66,6 +71,12 @@ namespace Hangfire.Common
             return Epoch.AddSeconds(value);
         }
 
+        /// <summary>
+        /// 序列化日期
+        /// 返回格式：2019-01-23T11:01:53.3827011+08:00
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string SerializeDateTime(DateTime value)
         {
             return value.ToString("o", CultureInfo.InvariantCulture);

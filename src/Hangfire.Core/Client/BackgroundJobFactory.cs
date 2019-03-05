@@ -49,6 +49,11 @@ namespace Hangfire.Client
             _innerFactory = innerFactory;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public BackgroundJob Create(CreateContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -79,6 +84,12 @@ namespace Hangfire.Client
             return new JobFilterInfo(_filterProvider.GetFilters(job));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="filters"></param>
+        /// <returns></returns>
         private CreatedContext CreateWithFilters(
             CreateContext context, 
             IEnumerable<IClientFilter> filters)

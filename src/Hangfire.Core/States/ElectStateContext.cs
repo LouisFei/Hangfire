@@ -24,6 +24,9 @@ using Hangfire.Storage;
 namespace Hangfire.States
 {
 #pragma warning disable 618
+    /// <summary>
+    /// 
+    /// </summary>
     public class ElectStateContext : StateContext
 #pragma warning restore 618
     {
@@ -51,9 +54,15 @@ namespace Hangfire.States
         [NotNull]
         public IStorageConnection Connection { get; }
 
+        /// <summary>
+        /// 只写事务
+        /// </summary>
         [NotNull]
         public IWriteOnlyTransaction Transaction { get; }
 
+        /// <summary>
+        /// 候选状态
+        /// </summary>
         [NotNull]
         public IState CandidateState
         {

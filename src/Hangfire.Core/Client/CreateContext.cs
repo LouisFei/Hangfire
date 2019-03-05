@@ -25,6 +25,7 @@ namespace Hangfire.Client
 {
     /// <summary>
     /// Provides information about the context in which the job is created.
+    /// 提供有关创建作业的上下文的信息。
     /// </summary>
     public class CreateContext
     {
@@ -35,6 +36,13 @@ namespace Hangfire.Client
             Parameters = context.Parameters;
         }
 
+        /// <summary>
+        /// 创建作业上下文
+        /// </summary>
+        /// <param name="storage">作业存储</param>
+        /// <param name="connection">作业仓库连接</param>
+        /// <param name="job">作业实例</param>
+        /// <param name="initialState">作业初始状态</param>
         public CreateContext(
             [NotNull] JobStorage storage, 
             [NotNull] IStorageConnection connection, 
@@ -61,9 +69,10 @@ namespace Hangfire.Client
         public IStorageConnection Connection { get; }
 
         /// <summary>
-        /// Gets an instance of the key-value storage. You can use it
-        /// to pass additional information between different client filters
-        /// or just between different methods.
+        /// Gets an instance of the key-value storage. 
+        /// 获取键值存储的实例。
+        /// You can use it to pass additional information between different client filters or just between different methods.
+        /// 您可以使用它在不同的客户端过滤器之间传递额外的信息，或者只是在不同的方法之间传递信息。
         /// </summary>
         [NotNull]
         public IDictionary<string, object> Items { get; }
@@ -75,10 +84,10 @@ namespace Hangfire.Client
         public Job Job { get; }
 
         /// <summary>
-        /// Gets the initial state of the creating job. Note, that
-        /// the final state of the created job could be changed after 
-        /// the registered instances of the <see cref="IElectStateFilter"/>
-        /// class are doing their job.
+        /// Gets the initial state of the creating job. 
+        /// 获取创建作业的初始状态。
+        /// Note, that the final state of the created job could be changed after the registered instances of the <see cref="IElectStateFilter"/> class are doing their job.
+        /// 注意，创建的作业的最终状态可以在<see cref="IElectStateFilter"/>类的注册实例完成它们的工作之后更改。
         /// </summary>
         [CanBeNull]
         public IState InitialState { get; }

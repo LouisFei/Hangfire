@@ -20,19 +20,34 @@ namespace Hangfire
 {
     /// <summary>
     /// Helper class that provides common values for the cron expressions.
+    /// 为cron表达式提供公共值的Helper类。
     /// </summary>
+    /// <remarks>
+    /// https://github.com/atifaziz/NCrontab/wiki/Crontab-Expression
+    /// https://github.com/atifaziz/NCrontab
+    /// </remarks>
     public static class Cron
     {
+        // MINUTES HOURS DAYS MONTHS DAYS-OF-WEEK
+        // 大骗子，不支持秒
+
+        #region Minutely
         /// <summary>
+        /// 每分钟触发一次。
         /// Returns cron expression that fires every minute.
+        /// 返回每分钟触发一次的cron表达式。
         /// </summary>
         public static string Minutely()
         {
             return "* * * * *";
         }
+        #endregion
 
+        #region Hourly
         /// <summary>
+        /// 每小时触发一次。
         /// Returns cron expression that fires every hour at the first minute.
+        /// 返回在每小时第一分钟触发一次的cron表达式。
         /// </summary>
         public static string Hourly()
         {
@@ -41,14 +56,21 @@ namespace Hangfire
 
         /// <summary>
         /// Returns cron expression that fires every hour at the specified minute.
+        /// 返回在指定分钟每小时触发一次的cron表达式。
         /// </summary>
-        /// <param name="minute">The minute in which the schedule will be activated (0-59).</param>
+        /// <param name="minute">
+        /// The minute in which the schedule will be activated (0-59).
+        /// 分钟有效值范围(0-59)。
+        /// </param>
         public static string Hourly(int minute)
         {
             return $"{minute} * * * *";
         }
+        #endregion
 
+        #region Daily
         /// <summary>
+        /// 每天零时零分
         /// Returns cron expression that fires every day at 00:00 UTC.
         /// </summary>
         public static string Daily()
@@ -57,8 +79,8 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Returns cron expression that fires every day at the first minute of
-        /// the specified hour in UTC.
+        /// 每天指定小时零分
+        /// Returns cron expression that fires every day at the first minute of the specified hour in UTC.
         /// </summary>
         /// <param name="hour">The hour in which the schedule will be activated (0-23).</param>
         public static string Daily(int hour)
@@ -67,8 +89,8 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Returns cron expression that fires every day at the specified hour and minute
-        /// in UTC.
+        /// 每天指定小时指定分
+        /// Returns cron expression that fires every day at the specified hour and minute in UTC.
         /// </summary>
         /// <param name="hour">The hour in which the schedule will be activated (0-23).</param>
         /// <param name="minute">The minute in which the schedule will be activated (0-59).</param>
@@ -76,7 +98,9 @@ namespace Hangfire
         {
             return $"{minute} {hour} * * *";
         }
+        #endregion
 
+        #region Weekly
         /// <summary>
         /// Returns cron expression that fires every week at Monday, 00:00 UTC.
         /// </summary>
@@ -117,10 +141,11 @@ namespace Hangfire
         {
             return $"{minute} {hour} * * {(int) dayOfWeek}";
         }
+        #endregion
 
+        #region Monthly
         /// <summary>
-        /// Returns cron expression that fires every month at 00:00 UTC of the first
-        /// day of month.
+        /// Returns cron expression that fires every month at 00:00 UTC of the first day of month.
         /// </summary>
         public static string Monthly()
         {
@@ -128,8 +153,7 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Returns cron expression that fires every month at 00:00 UTC of the specified
-        /// day of month.
+        /// Returns cron expression that fires every month at 00:00 UTC of the specified day of month.
         /// </summary>
         /// <param name="day">The day of month in which the schedule will be activated (1-31).</param>
         public static string Monthly(int day)
@@ -159,7 +183,9 @@ namespace Hangfire
         {
             return $"{minute} {hour} {day} * *";
         }
+        #endregion
 
+        #region Yearly
         /// <summary>
         /// Returns cron expression that fires every year on Jan, 1st at 00:00 UTC.
         /// </summary>
@@ -213,8 +239,12 @@ namespace Hangfire
         {
             return $"{minute} {hour} {day} {month} *";
         }
+        #endregion
+
+        #region Interval
 
         /// <summary>
+        /// 每隔几分钟。
         /// Returns cron expression that fires every &lt;<paramref name="interval"></paramref>&gt; minutes.
         /// </summary>
         /// <param name="interval">The number of minutes to wait between every activation.</param>
@@ -224,6 +254,7 @@ namespace Hangfire
         }
 
         /// <summary>
+        /// 每隔几小时
         /// Returns cron expression that fires every &lt;<paramref name="interval"></paramref>&gt; hours.
         /// </summary>
         /// <param name="interval">The number of hours to wait between every activation.</param>
@@ -233,6 +264,7 @@ namespace Hangfire
         }
 
         /// <summary>
+        /// 每隔几天
         /// Returns cron expression that fires every &lt;<paramref name="interval"></paramref>&gt; days.
         /// </summary>
         /// <param name="interval">The number of days to wait between every activation.</param>
@@ -242,6 +274,7 @@ namespace Hangfire
         }
 
         /// <summary>
+        /// 每隔几个月
         /// Returns cron expression that fires every &lt;<paramref name="interval"></paramref>&gt; months.
         /// </summary>
         /// <param name="interval">The number of months to wait between every activation.</param>
@@ -249,10 +282,13 @@ namespace Hangfire
         {
             return $"0 0 1 */{interval} *";
         }
+        #endregion
 
+        #region [废弃]将Cron表达式字符串转换为描述。
 #if NETFULL
         /// <summary>
         /// Converts a Cron expression string into a description.
+        /// [废弃]将Cron表达式字符串转换为描述。
         /// </summary>
         /// <param name="cronExpression">A Cron expression string.</param>
         /// <returns>English description.</returns>
@@ -278,5 +314,6 @@ namespace Hangfire
             return CronExpressionDescriptor.ExpressionDescriptor.GetDescription(cronExpression);
         }
 #endif
+        #endregion
     }
 }

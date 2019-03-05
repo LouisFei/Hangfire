@@ -25,17 +25,23 @@ using Hangfire.Storage;
 
 namespace Hangfire.SqlServer
 {
+    /// <summary>
+    /// SqlServer分布式锁？？
+    /// </summary>
     public class SqlServerDistributedLock : IDisposable
     {
+        /// <summary>
+        /// 锁超时时间，默认5秒
+        /// </summary>
         private static readonly TimeSpan LockTimeout = TimeSpan.FromSeconds(5);
 
         private const string LockMode = "Exclusive";
         private const string LockOwner = "Session";
 
-        // Connections to SQL Azure Database that are idle for 30 minutes 
-        // or longer will be terminated. And since we are using separate
-        // connection for a distributed lock, we'd like to prevent Resource
-        // Governor from terminating it.
+        // Connections to SQL Azure Database that are idle for 30 minutes or longer will be terminated. 
+        // 到SQL Azure数据库的空闲30分钟或更长时间的连接将被终止。
+        // And since we are using separate connection for a distributed lock, we'd like to prevent Resource Governor from terminating it.
+        // 由于我们对分布式锁使用单独的连接，我们希望防止资源调控器终止它。
         private static readonly TimeSpan KeepAliveInterval = TimeSpan.FromMinutes(1);
 
         private static readonly IDictionary<int, string> LockErrorMessages
@@ -159,29 +165,48 @@ namespace Hangfire.SqlServer
             }
         }
 
+        #region Acquire 锁定指定资源
+        /// <summary>
+        /// 锁定指定资源
+        /// </summary>
+        /// <param name="connection">数据库连接</param>
+        /// <param name="resource">
+        /// 指定标识锁资源的名称的字符串。 
+        /// 应用程序必须确保该资源名称是唯一的。 
+        /// 指定的名称经过内部哈希运算后成为可以存储在 SQL Server 锁管理器中的值。 
+        /// resource_name是nvarchar(255) ，无默认值。 
+        /// 如果资源字符串的长度超过nvarchar(255)，则将其截断成nvarchar(255)。
+        /// </param>
+        /// <param name="timeout">锁超时值（毫秒）。</param>
         internal static void Acquire(IDbConnection connection, string resource, TimeSpan timeout)
         {
             if (connection.State != ConnectionState.Open)
             {
-                // When we are passing a closed connection to Dapper's Execute method,
-                // it kindly opens it for us, but after command execution, it will be closed
-                // automatically, and our just-acquired application lock will immediately
-                // be released. This is not behavior we want to achieve, so let's throw an
-                // exception instead.
+                // When we are passing a closed connection to Dapper's Execute method, it kindly opens it for us, 
+                // 当我们将一个关闭的连接传递给Dapper的执行方法时，它会友好地为我们打开它，
+                // but after command execution, it will be closed automatically, 
+                // 但在执行命令后，它会自动关闭，
+                // and our just-acquired application lock will immediately be released. 
+                // 我们刚刚获得的应用程序锁将立即释放。
+                // This is not behavior we want to achieve, so let's throw an exception instead.
+                // 这不是我们想要实现的行为，因此让我们抛出一个异常。
                 throw new InvalidOperationException("Connection must be open before acquiring a distributed lock.");
             }
 
             var started = Stopwatch.StartNew();
 
-            // We can't pass our timeout directly to the sp_getapplock stored procedure, because
-            // high values, such as minute or more, may cause SQL Server's thread pool starvation,
-            // when the number of connections that try to acquire a lock is more than the number of 
-            // available threads in SQL Server. In this case a deadlock will occur, when SQL Server 
-            // tries to schedule some more work for a connection that acquired a lock, but all the 
-            // available threads in a pool waiting for that lock to be released.
-            //
-            // So we are trying to acquire a lock multiple times instead, with timeout that's equal
-            // to seconds, not minutes.
+            // We can't pass our timeout directly to the sp_getapplock stored procedure, because high values, 
+            // 我们不能直接将超时传递给sp_getapplock存储过程，因为高值，
+            // such as minute or more, may cause SQL Server's thread pool starvation,
+            // 如分钟或更长，可能导致SQL Server的线程池饥饿，
+            // when the number of connections that try to acquire a lock is more than the number of available threads in SQL Server. 
+            // 当试图获取锁的连接数大于SQL Server中可用线程数时。
+            // In this case a deadlock will occur, when SQL Server tries to schedule some more work for a connection that acquired a lock, 
+            // 在这种情况下，当SQL Server试图为获得锁的连接安排更多的工作时，将发生死锁，
+            // but all the available threads in a pool waiting for that lock to be released.
+            // 但是线程池中的所有可用线程将等待这个锁被释放。
+            // So we are trying to acquire a lock multiple times instead, with timeout that's equal to seconds, not minutes.
+            // 所以我们尝试多次获取锁，超时等于秒，而不是分钟。
             var lockTimeout = (long) Math.Min(LockTimeout.TotalMilliseconds, timeout.TotalMilliseconds);
 
             do
@@ -205,6 +230,7 @@ namespace Hangfire.SqlServer
                 if (lockResult >= 0)
                 {
                     // The lock has been successfully obtained on the specified resource.
+                    // 已在指定资源上成功获取锁定。
                     return;
                 }
 
@@ -217,6 +243,7 @@ namespace Hangfire.SqlServer
 
             throw new DistributedLockTimeoutException(resource);
         }
+        #endregion
 
         internal static void Release(IDbConnection connection, string resource)
         {

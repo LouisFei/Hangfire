@@ -24,9 +24,19 @@ using Hangfire.Logging.LogProviders;
 
 namespace Hangfire
 {
+    /// <summary>
+    /// 全局配置扩展方法
+    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class GlobalConfigurationExtensions
     {
+        /// <summary>
+        /// 使用仓库
+        /// </summary>
+        /// <typeparam name="TStorage"></typeparam>
+        /// <param name="configuration"></param>
+        /// <param name="storage"></param>
+        /// <returns></returns>
         public static IGlobalConfiguration<TStorage> UseStorage<TStorage>(
             [NotNull] this IGlobalConfiguration configuration,
             [NotNull] TStorage storage)
@@ -57,6 +67,13 @@ namespace Hangfire
             return configuration.UseActivator(new JobActivator());
         }
 
+        /// <summary>
+        /// 设置日志记录器提供者（不同的提供者提供了各自的日志方案）
+        /// </summary>
+        /// <typeparam name="TLogProvider"></typeparam>
+        /// <param name="configuration"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public static IGlobalConfiguration<TLogProvider> UseLogProvider<TLogProvider>(
             [NotNull] this IGlobalConfiguration configuration,
             [NotNull] TLogProvider provider)
@@ -76,6 +93,11 @@ namespace Hangfire
             return configuration.UseLogProvider(new NLogLogProvider());
         }
 
+        /// <summary>
+        /// 使用带有颜色的控制器日志记录器
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         public static IGlobalConfiguration<ColouredConsoleLogProvider> UseColouredConsoleLogProvider(
             [NotNull] this IGlobalConfiguration configuration)
         {
@@ -158,9 +180,18 @@ namespace Hangfire
             return configuration;
         }
 
+        /// <summary>
+        /// 使用某某配置
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="configuration"></param>
+        /// <param name="entry"></param>
+        /// <param name="entryAction"></param>
+        /// <returns></returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IGlobalConfiguration<T> Use<T>(
-            [NotNull] this IGlobalConfiguration configuration, T entry,
+            [NotNull] this IGlobalConfiguration configuration, 
+            T entry,
             [NotNull] Action<T> entryAction)
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
@@ -170,6 +201,10 @@ namespace Hangfire
             return new ConfigurationEntry<T>(entry);
         }
 
+        /// <summary>
+        /// 配置项类
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         private class ConfigurationEntry<T> : IGlobalConfiguration<T>
         {
             public ConfigurationEntry(T entry)

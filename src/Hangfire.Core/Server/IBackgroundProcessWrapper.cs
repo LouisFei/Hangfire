@@ -16,6 +16,9 @@
 
 namespace Hangfire.Server
 {
+    /// <summary>
+    /// 后台进程包装接口
+    /// </summary>
     internal interface IBackgroundProcessWrapper : IBackgroundProcess
     {
 #pragma warning disable 618

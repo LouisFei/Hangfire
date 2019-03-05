@@ -23,15 +23,20 @@ using Hangfire.Storage;
 namespace Hangfire.States
 {
     /// <summary>
-    /// Defines the <i>final</i> state of a background job when a <see cref="Server.Worker"/>
-    /// performed an <i>enqueued</i> job without any exception thrown during the performance.
+    /// Defines the <i>final</i> state of a background job when a <see cref="Server.Worker"/> performed an <i>enqueued</i> job without any exception thrown during the performance.
+    /// 定义后台作业的最终状态，该后台作业是指工作人员在执行排队作业时没有在执行过程中引发任何异常。
     /// </summary>
     /// <remarks>
-    /// <para>All the transitions to the <i>Succeeded</i> state are internal for the <see cref="Server.Worker"/>
-    /// background process. You can't create background jobs using this state, and can't change state
-    /// to <i>Succeeded</i>.</para>
-    /// <para>This state is used in a user code primarily in state change filters (TODO: add a link)
-    /// to add custom logic during state transitions.</para> 
+    /// <para>
+    /// All the transitions to the <i>Succeeded</i> state are internal for the <see cref="Server.Worker"/> background process. 
+    /// 所有到成功状态的转换都是Worker后台进程的内部转换。
+    /// You can't create background jobs using this state, and can't change state to <i>Succeeded</i>.
+    /// 您不能使用此状态创建后台作业，也不能将状态更改为成功。
+    /// </para>
+    /// <para>
+    /// This state is used in a user code primarily in state change filters (TODO: add a link) to add custom logic during state transitions.
+    /// 此状态主要用于状态更改筛选器(TODO: add a link)中的用户代码中，用于在状态转换期间添加自定义逻辑。
+    /// </para> 
     /// </remarks> 
     /// 
     /// <seealso cref="EnqueuedState"/>
@@ -43,6 +48,7 @@ namespace Hangfire.States
     {
         /// <summary>
         /// Represents the name of the <i>Succeeded</i> state. This field is read-only.
+        /// 表示成功状态的名称。该字段是只读的。
         /// </summary>
         /// <remarks>
         /// The value of this field is <c>"Succeeded"</c>.
@@ -55,35 +61,38 @@ namespace Hangfire.States
             Result = result;
             Latency = latency;
             PerformanceDuration = performanceDuration;
-            
         }
 
         /// <summary>
         /// Gets a date/time when the current state instance was created.
+        /// 获取创建当前状态实例的日期/时间。
         /// </summary>
         public DateTime SucceededAt { get; }
 
         /// <summary>
         /// Gets the value returned by a job method.
+        /// 获取作业方法返回的值。
         /// </summary>
         public object Result { get; }
-        
+
         /// <summary>
-        /// Gets the total number of milliseconds passed from a job
-        /// creation time till the start of the performance.
+        /// Gets the total number of milliseconds passed from a job creation time till the start of the performance.
+        /// 获取从作业创建时间到性能开始的总毫秒数。
         /// </summary>
         public long Latency { get; }
 
         /// <summary>
         /// Gets the total milliseconds elapsed from a processing start.
+        /// 获取处理启动所经过的总毫秒数。
         /// </summary>
         public long PerformanceDuration { get; }
 
         /// <inheritdoc />
         /// <remarks>
         /// Always equals to <see cref="StateName"/> for the <see cref="SucceededState"/>.
-        /// Please see the remarks section of the <see cref="IState.Name">IState.Name</see>
-        /// article for the details.
+        /// 总是等于成功状态的StateName。
+        /// Please see the remarks section of the <see cref="IState.Name">IState.Name</see> article for the details.
+        /// Please see the remarks section of the IStateName article for the details.
         /// </remarks>
         public string Name => StateName;
 
@@ -93,25 +102,28 @@ namespace Hangfire.States
         /// <inheritdoc />
         /// <remarks>
         /// Always returns <see langword="true"/> for the <see cref="SucceededState"/>.
-        /// Please refer to the <see cref="IState.IsFinal">IState.IsFinal</see> documentation
-        /// for the details.
+        /// Please refer to the <see cref="IState.IsFinal">IState.IsFinal</see> documentation for the details.
         /// </remarks>
         public bool IsFinal => true;
 
         /// <inheritdoc />
         /// <remarks>
         /// Always returns <see langword="false" /> for the <see cref="SucceededState"/>.
-        /// Please see the description of this property in the
-        /// <see cref="IState.IgnoreJobLoadException">IState.IgnoreJobLoadException</see>
-        /// article.
+        /// Please see the description of this property in the <see cref="IState.IgnoreJobLoadException">IState.IgnoreJobLoadException</see> article.
+        /// 请参阅IgnoreJobLoadException文章中对该属性的描述。
         /// </remarks>
         public bool IgnoreJobLoadException => false;
 
+        /// <summary>
+        /// 序列化数据
+        /// </summary>
         /// <inheritdoc />
         /// <remarks>
-        /// <para>Returning dictionary contains the following keys. You can obtain 
-        /// the state data by using the <see cref="IStorageConnection.GetStateData"/>
-        /// method.</para>
+        /// <para>
+        /// Returning dictionary contains the following keys. 
+        /// 返回字典包含以下键。
+        /// You can obtain the state data by using the <see cref="IStorageConnection.GetStateData"/> method.
+        /// </para>
         /// <list type="table">
         ///     <listheader>
         ///         <term>Key</term>

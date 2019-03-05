@@ -23,6 +23,12 @@ namespace Hangfire
 {
     public static class SqlServerStorageExtensions
     {
+        /// <summary>
+        /// 设置SqlServer仓库（并指定数据库连接字符串）
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="nameOrConnectionString"></param>
+        /// <returns></returns>
         public static IGlobalConfiguration<SqlServerStorage> UseSqlServerStorage(
             [NotNull] this IGlobalConfiguration configuration,
             [NotNull] string nameOrConnectionString)

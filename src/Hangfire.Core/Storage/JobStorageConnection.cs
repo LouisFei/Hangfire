@@ -23,31 +23,90 @@ using Hangfire.Server;
 
 namespace Hangfire.Storage
 {
+    /// <summary>
+    /// 作业仓库连接抽象基类
+    /// </summary>
     public abstract class JobStorageConnection : IStorageConnection
     {
         public virtual void Dispose()
         {
         }
 
-        // Common
+        // Common 通用
+        /// <summary>
+        /// 创建只写事务
+        /// </summary>
+        /// <returns></returns>
         public abstract IWriteOnlyTransaction CreateWriteTransaction();
+        /// <summary>
+        /// 获得分布式锁
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
         public abstract IDisposable AcquireDistributedLock(string resource, TimeSpan timeout);
 
-        // Background jobs
+        // Background jobs 后台作业
+        /// <summary>
+        /// 创建会过期作业
+        /// </summary>
+        /// <param name="job">作业</param>
+        /// <param name="parameters">参数</param>
+        /// <param name="createdAt">创建时间</param>
+        /// <param name="expireIn">到期时间</param>
+        /// <returns></returns>
         public abstract string CreateExpiredJob(Job job, IDictionary<string, string> parameters, DateTime createdAt, TimeSpan expireIn);
+
+        /// <summary>
+        /// 获取下一个作业
+        /// </summary>
+        /// <param name="queues">队列</param>
+        /// <param name="cancellationToken">可取消操作的标记</param>
+        /// <returns></returns>
         public abstract IFetchedJob FetchNextJob(string[] queues, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// 设置作业参数
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public abstract void SetJobParameter(string id, string name, string value);
+
+        /// <summary>
+        /// 获得作业参数
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public abstract string GetJobParameter(string id, string name);
+
+        /// <summary>
+        /// 获得作业数据
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
         public abstract JobData GetJobData(string jobId);
+
+        /// <summary>
+        /// 获得作业状态数据
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
         public abstract StateData GetStateData(string jobId);
 
-        // Servers
+        // Servers 服务器
+        /// <summary>
+        /// 宣布服务器
+        /// </summary>
+        /// <param name="serverId"></param>
+        /// <param name="context"></param>
         public abstract void AnnounceServer(string serverId, ServerContext context);
         public abstract void RemoveServer(string serverId);
         public abstract void Heartbeat(string serverId);
         public abstract int RemoveTimedOutServers(TimeSpan timeOut);
 
-        // Sets
+        // Sets 集合
         public abstract HashSet<string> GetAllItemsFromSet(string key);
         public abstract string GetFirstByLowestScoreFromSet(string key, double fromScore, double toScore);
 
@@ -66,7 +125,7 @@ namespace Hangfire.Storage
             throw new NotSupportedException();
         }
 
-        // Hashes
+        // Hashes 哈希
         public abstract void SetRangeInHash(string key, IEnumerable<KeyValuePair<string, string>> keyValuePairs);
         public abstract Dictionary<string, string> GetAllEntriesFromHash(string key);
 
@@ -85,7 +144,7 @@ namespace Hangfire.Storage
             throw new NotSupportedException();
         }
 
-        // Lists
+        // Lists 列表
         public virtual long GetListCount([NotNull] string key)
         {
             throw new NotSupportedException();
@@ -106,7 +165,7 @@ namespace Hangfire.Storage
             throw new NotSupportedException();
         }
 
-        // Counters
+        // Counters 计数器
         public virtual long GetCounter([NotNull] string key)
         {
             throw new NotSupportedException();

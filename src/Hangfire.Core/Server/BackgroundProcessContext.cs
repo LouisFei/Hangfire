@@ -22,8 +22,18 @@ using Hangfire.Common;
 
 namespace Hangfire.Server
 {
+    /// <summary>
+    /// 后台进程上下文环境
+    /// </summary>
     public class BackgroundProcessContext
     {
+        /// <summary>
+        /// 实例化后台进程上下文环境对象
+        /// </summary>
+        /// <param name="serverId">服务器编号</param>
+        /// <param name="storage">存储方式</param>
+        /// <param name="properties">属性集合</param>
+        /// <param name="cancellationToken">取消操作标记</param>
         public BackgroundProcessContext(
             [NotNull] string serverId,
             [NotNull] JobStorage storage, 
@@ -51,7 +61,7 @@ namespace Hangfire.Server
 
         public CancellationToken CancellationToken { get; }
 
-        public bool IsShutdownRequested => CancellationToken.IsCancellationRequested;
+        public bool IsShutdownRequested => CancellationToken.IsCancellationRequested; //获取是否已请求取消此标记
 
         public void Wait(TimeSpan timeout)
         {

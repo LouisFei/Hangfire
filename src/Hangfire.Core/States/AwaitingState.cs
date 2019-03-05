@@ -24,10 +24,8 @@ using Newtonsoft.Json;
 namespace Hangfire.States
 {
     /// <summary>
-    /// Defines the <i>intermediate</i> state of a background job when it is waiting
-    /// for a parent background job to be finished before it is moved to the
-    /// <see cref="EnqueuedState"/> by the <see cref="ContinuationsSupportAttribute"/>
-    /// filter.
+    /// Defines the <i>intermediate</i> state of a background job when it is waiting for a parent background job to be finished before it is moved to the <see cref="EnqueuedState"/> by the <see cref="ContinuationsSupportAttribute"/> filter.
+    /// 定义当后台作业等待父后台作业完成时的中间状态，然后由ContinuationsSupportAttribute筛选器将其移动到EnqueuedState。
     /// </summary>
     /// 
     /// <remarks>

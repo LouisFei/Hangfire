@@ -23,9 +23,8 @@ using Hangfire.Storage;
 namespace Hangfire
 {
     /// <summary>
-    /// Represents a job filter that performs <i>automatic retries</i> for 
-    /// background jobs whose processing was failed due to an exception, with 
-    /// a limited number of attempts.
+    /// Represents a job filter that performs <i>automatic retries</i> for background jobs whose processing was failed due to an exception, with a limited number of attempts.
+    /// 表示作业筛选器，该筛选器对因异常而处理失败的后台作业执行自动重试，但尝试次数有限。
     /// </summary>
     /// 
     /// <remarks>
@@ -102,6 +101,7 @@ namespace Hangfire
         }
 
         /// <summary>
+        /// 获取或设置自动重试尝试的最大次数。
         /// Gets or sets the maximum number of automatic retry attempts.
         /// </summary>
         /// <value>Any non-negative number.</value>

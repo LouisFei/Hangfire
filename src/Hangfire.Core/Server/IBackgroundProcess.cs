@@ -22,8 +22,8 @@ using Hangfire.Annotations;
 namespace Hangfire.Server
 {
     /// <summary>
-    /// Provides methods for defining processes that will be executed in a
-    /// background thread by <see cref="BackgroundProcessingServer"/>.
+    /// Provides methods for defining processes that will be executed in a background thread by <see cref="BackgroundProcessingServer"/>.
+    /// 提供用于定义将由BackgroundProcessingServer在后台线程中执行的进程的方法。
     /// </summary>
     /// 
     /// <remarks>
@@ -36,9 +36,12 @@ namespace Hangfire.Server
     public interface IBackgroundProcess : IServerProcess
     {
         /// <summary>
-        /// 
+        /// 执行
         /// </summary>
-        /// <param name="context">Context for a background process.</param>
+        /// <param name="context">
+        /// Context for a background process.
+        /// 后台进程执行上下文环境
+        /// </param>
         /// <exception cref="ArgumentNullException"><paramref name="context"/> is null.</exception>
         void Execute([NotNull] BackgroundProcessContext context);
     }

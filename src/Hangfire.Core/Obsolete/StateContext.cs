@@ -22,6 +22,9 @@ using Hangfire.Common;
 namespace Hangfire.States
 {
     /// <exclude />
+    /// <summary>
+    /// [废弃了]状态上下文对象
+    /// </summary>
     [Obsolete("This class is here for compatibility reasons. Will be removed in 2.0.0.")]
     public abstract class StateContext
     {

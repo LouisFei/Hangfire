@@ -18,16 +18,20 @@ namespace Hangfire.States
 {
     /// <summary>
     /// Provides a mechanism for running state election and state applying processes.
+    /// 提供一种运行状态选择和应用流程的机制。
     /// </summary>
     /// 
     /// <seealso cref="StateMachine"/>
     public interface IStateMachine
     {
         /// <summary>
-        /// Performs the state applying process, where a current background job
-        /// will be moved to the elected state.
+        /// Performs the state applying process, where a current background job will be moved to the elected state.
+        /// 执行状态申请流程，其中当前后台作业将被移动到所选的状态。
         /// </summary>
-        /// <param name="context">The context of a state applying process.</param>
+        /// <param name="context">
+        /// The context of a state applying process.
+        /// 状态应用流程的上下文
+        /// </param>
         IState ApplyState(ApplyStateContext context);
     }
 }

@@ -29,21 +29,33 @@ namespace Hangfire.Server
 {
     /// <summary>
     /// Responsible for running the given collection background processes.
+    /// 负责运行给定的后台进程集合。
     /// </summary>
     /// 
     /// <remarks>
     /// Immediately starts the processes in a background thread.
+    /// 立即在后台线程中启动进程。
     /// Responsible for announcing/removing a server, bound to a storage.
+    /// 负责通知/删除绑定到存储的服务器。
     /// Wraps all the processes with a infinite loop and automatic retry.
+    /// 用无限循环和自动重试包装所有进程。
     /// Executes all the processes in a single context.
-    /// Uses timeout in dispose method, waits for all the components, cancel signals shutdown
-    /// Contains some required processes and uses storage processes.
+    /// 在单个上下文中执行所有进程。
+    /// Uses timeout in dispose method, waits for all the components, cancel signals shutdown Contains some required processes and uses storage processes.
+    /// 在dispose方法中使用超时，等待所有组件，cancel信号关闭包含一些需要的进程，并使用存储进程。
     /// Generates unique id.
+    /// 生成惟一的id。
     /// Properties are still bad.
     /// </remarks>
     public sealed class BackgroundProcessingServer : IBackgroundProcess, IDisposable
     {
+        /// <summary>
+        /// 默认的关闭超时
+        /// </summary>
         public static readonly TimeSpan DefaultShutdownTimeout = TimeSpan.FromSeconds(15);
+        /// <summary>
+        /// 日志记录器
+        /// </summary>
         private readonly ILog _logger = LogProvider.For<BackgroundProcessingServer>();
 
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
@@ -52,6 +64,9 @@ namespace Hangfire.Server
 #pragma warning restore 618
 
         private readonly BackgroundProcessingServerOptions _options;
+        /// <summary>
+        /// 引导/启动任务
+        /// </summary>
         private readonly Task _bootstrapTask;
 
         public BackgroundProcessingServer([NotNull] IEnumerable<IBackgroundProcess> processes)
@@ -82,8 +97,8 @@ namespace Hangfire.Server
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundProcessingServer"/>
-        /// class and immediately starts all the given background processes.
+        /// Initializes a new instance of the <see cref="BackgroundProcessingServer"/> class and immediately starts all the given background processes.
+        /// 初始化BackgroundProcessingServer类的新实例，并立即启动所有给定的后台进程。
         /// </summary>
         /// <param name="storage"></param>
         /// <param name="processes"></param>

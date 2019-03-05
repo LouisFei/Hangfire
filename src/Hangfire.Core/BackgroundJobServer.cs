@@ -27,6 +27,9 @@ using System.ComponentModel;
 
 namespace Hangfire
 {
+    /// <summary>
+    /// 后台作业服务
+    /// </summary>
     public class BackgroundJobServer : IDisposable
     {
         private readonly ILog _logger = LogProvider.For<BackgroundJobServer>();
@@ -35,8 +38,8 @@ namespace Hangfire
         private readonly BackgroundProcessingServer _processingServer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundJobServer"/> class
-        /// with default options and <see cref="JobStorage.Current"/> storage.
+        /// Initializes a new instance of the <see cref="BackgroundJobServer"/> class with default options and <see cref="JobStorage.Current"/> storage.
+        /// 初始化一个后台作业服务的新实例
         /// </summary>
         public BackgroundJobServer()
             : this(new BackgroundJobServerOptions())
@@ -44,8 +47,8 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundJobServer"/> class
-        /// with default options and the given storage.
+        /// Initializes a new instance of the <see cref="BackgroundJobServer"/> class with default options and the given storage.
+        /// 初始化一个后台作业服务的新实例
         /// </summary>
         /// <param name="storage">The storage</param>
         public BackgroundJobServer([NotNull] JobStorage storage)
@@ -54,8 +57,8 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundJobServer"/> class
-        /// with the given options and <see cref="JobStorage.Current"/> storage.
+        /// Initializes a new instance of the <see cref="BackgroundJobServer"/> class with the given options and <see cref="JobStorage.Current"/> storage.
+        /// 初始化一个后台作业服务的新实例
         /// </summary>
         /// <param name="options">Server options</param>
         public BackgroundJobServer([NotNull] BackgroundJobServerOptions options)
@@ -64,8 +67,8 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundJobServer"/> class
-        /// with the specified options and the given storage.
+        /// Initializes a new instance of the <see cref="BackgroundJobServer"/> class with the specified options and the given storage.
+        /// 初始化一个后台作业服务的新实例
         /// </summary>
         /// <param name="options">Server options</param>
         /// <param name="storage">The storage</param>
@@ -74,6 +77,12 @@ namespace Hangfire
         {
         }
 
+        /// <summary>
+        /// 初始化一个后台作业服务的新实例
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="storage"></param>
+        /// <param name="additionalProcesses"></param>
         public BackgroundJobServer(
             [NotNull] BackgroundJobServerOptions options,
             [NotNull] JobStorage storage,
@@ -85,6 +94,17 @@ namespace Hangfire
         {
         }
 
+        /// <summary>
+        /// 初始化一个后台作业服务的新实例
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="storage"></param>
+        /// <param name="additionalProcesses"></param>
+        /// <param name="filterProvider"></param>
+        /// <param name="activator"></param>
+        /// <param name="factory"></param>
+        /// <param name="performer"></param>
+        /// <param name="stateChanger"></param>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public BackgroundJobServer(
             [NotNull] BackgroundJobServerOptions options,
@@ -114,17 +134,24 @@ namespace Hangfire
                 { "WorkerCount", options.WorkerCount }
             };
 
-            _logger.Info("Starting Hangfire Server");
-            _logger.Info($"Using job storage: '{storage}'");
+            //_logger.Info("Starting Hangfire Server");
+            _logger.Info("启动Hangfire服务器");
+            //_logger.Info($"Using job storage: '{storage}'");
+            _logger.Info($"使用的作业存储: '{storage}'");
 
             storage.WriteOptionsToLog(_logger);
 
-            _logger.Info("Using the following options for Hangfire Server:");
-            _logger.Info($"    Worker count: {options.WorkerCount}");
-            _logger.Info($"    Listening queues: {String.Join(", ", options.Queues.Select(x => "'" + x + "'"))}");
-            _logger.Info($"    Shutdown timeout: {options.ShutdownTimeout}");
-            _logger.Info($"    Schedule polling interval: {options.SchedulePollingInterval}");
-            
+            //_logger.Info("Using the following options for Hangfire Server:");
+            _logger.Info("为Hangfire服务器使用以下选项:");
+            //_logger.Info($"    Worker count: {options.WorkerCount}");
+            _logger.Info($"    工作者数量: {options.WorkerCount}");
+            //_logger.Info($"    Listening queues: {String.Join(", ", options.Queues.Select(x => "'" + x + "'"))}");
+            _logger.Info($"    监听队列: {String.Join(", ", options.Queues.Select(x => "'" + x + "'"))}");
+            //_logger.Info($"    Shutdown timeout: {options.ShutdownTimeout}");
+            _logger.Info($"    关闭超时: {options.ShutdownTimeout}");
+            //_logger.Info($"    Schedule polling interval: {options.SchedulePollingInterval}");
+            _logger.Info($"    计划轮询间隔: {options.SchedulePollingInterval}");
+
             _processingServer = new BackgroundProcessingServer(
                 storage, 
                 processes, 
@@ -168,6 +195,10 @@ namespace Hangfire
             return processes;
         }
 
+        /// <summary>
+        /// 获得进程服务选项
+        /// </summary>
+        /// <returns></returns>
         private BackgroundProcessingServerOptions GetProcessingServerOptions()
         {
             return new BackgroundProcessingServerOptions

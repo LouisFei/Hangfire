@@ -24,34 +24,41 @@ using Hangfire.Storage;
 namespace Hangfire.Server
 {
     /// <summary>
-    /// Represents a background process responsible for <i>enqueueing delayed
-    /// jobs</i>.
+    /// 延迟作业调度器
+    /// Represents a background process responsible for <i>enqueueing delayed jobs</i>.
+    /// 表示负责对延迟作业排队的后台进程。
     /// </summary>
     /// 
     /// <remarks>
-    /// <para>This background process polls the <i>delayed job schedule</i> for 
-    /// delayed jobs that are ready to be enqueued. To prevent a stress load
-    /// on a job storage, the configurable delay is used between scheduler 
-    /// runs. Delay is used only when there are no more background jobs to be
-    /// enqueued.</para>
+    /// <para>
+    /// This background process polls the <i>delayed job schedule</i> for delayed jobs that are ready to be enqueued. 
+    /// 这个后台进程为准备排队的延迟作业轮询延迟作业调度。
+    /// To prevent a stress load on a job storage, the configurable delay is used between scheduler runs. 
+    /// 为了防止作业存储上的压力负载，在调度程序运行之间使用可配置的延迟。
+    /// Delay is used only when there are no more background jobs to be enqueued.
+    /// 延迟仅在没有更多后台作业排队时使用。
+    /// </para>
     /// 
-    /// <para>When a background job is ready to be enqueued, it is simply
-    /// moved from <see cref="ScheduledState"/> to the <see cref="EnqueuedState"/>
-    /// by using <see cref="IBackgroundJobStateChanger"/>.</para>
+    /// <para>
+    /// When a background job is ready to be enqueued, it is simply moved from <see cref="ScheduledState"/> to the <see cref="EnqueuedState"/> by using <see cref="IBackgroundJobStateChanger"/>.
+    /// 当后台作业准备进入队列时，只需使用IBackgroundJobStateChanger将其从ScheduledState移动到EnqueuedState。
+    /// </para>
     /// 
-    /// <para>Delayed job schedule is based on a Set data structure of a job
-    /// storage, so you can use this background process as an example of a
-    /// custom extension.</para>
+    /// <para>
+    /// Delayed job schedule is based on a Set data structure of a job storage, so you can use this background process as an example of a custom extension.
+    /// 延迟作业调度基于作业存储的一组数据结构，因此可以使用此后台流程作为自定义扩展的示例。
+    /// </para>
     ///  
-    /// <para>Multiple instances of this background process can be used in
-    /// separate threads/processes without additional configuration (distributed
-    /// locks are used). However, this only adds support for fail-over, and does 
-    /// not increase the performance.</para>
+    /// <para>
+    /// Multiple instances of this background process can be used in separate threads/processes without additional configuration (distributed locks are used). 
+    /// 这个后台进程的多个实例可以在单独的线程/进程中使用，而不需要额外的配置(使用分布式锁)。
+    /// However, this only adds support for fail-over, and does not increase the performance.
+    /// 但是，这只增加了对故障转移的支持，并没有提高性能。
+    /// </para>
     /// 
     /// <note type="important">
-    /// If you are using <b>custom filter providers</b>, you need to pass a custom
-    /// <see cref="IBackgroundJobStateChanger"/> instance to make this process
-    /// respect your filters when enqueueing background jobs.
+    /// If you are using <b>custom filter providers</b>, you need to pass a custom <see cref="IBackgroundJobStateChanger"/> instance to make this process respect your filters when enqueueing background jobs.
+    /// 如果您正在使用自定义过滤器提供程序，那么您需要传递一个自定义IBackgroundJobStateChanger实例，以使该流程在排队后台作业时遵守您的过滤器。
     /// </note>
     /// </remarks>
     /// 
@@ -62,6 +69,7 @@ namespace Hangfire.Server
     {
         /// <summary>
         /// Represents a default polling interval for delayed job scheduler. 
+        /// 表示延迟作业调度程序的默认轮询间隔。15秒。
         /// This field is read-only.
         /// </summary>
         /// <remarks>
@@ -72,13 +80,15 @@ namespace Hangfire.Server
 
         private readonly ILog _logger = LogProvider.For<DelayedJobScheduler>();
 
+        /// <summary>
+        /// 状态改变器
+        /// </summary>
         private readonly IBackgroundJobStateChanger _stateChanger;
         private readonly TimeSpan _pollingDelay;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelayedJobScheduler"/>
-        /// class with the <see cref="DefaultPollingDelay"/> value as a
-        /// delay between runs.
+        /// Initializes a new instance of the <see cref="DelayedJobScheduler"/> class with the <see cref="DefaultPollingDelay"/> value as a delay between runs.
+        /// 初始化DelayedJobScheduler类的新实例，使用DefaultPollingDelay值作为运行之间的延迟。
         /// </summary>
         public DelayedJobScheduler() 
             : this(DefaultPollingDelay)
@@ -86,10 +96,13 @@ namespace Hangfire.Server
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelayedJobScheduler"/>
-        /// class with a specified polling interval.
+        /// Initializes a new instance of the <see cref="DelayedJobScheduler"/> class with a specified polling interval.
+        /// 使用指定的轮询间隔初始化DelayedJobScheduler类的新实例。
         /// </summary>
-        /// <param name="pollingDelay">Delay between scheduler runs.</param>
+        /// <param name="pollingDelay">
+        /// Delay between scheduler runs.
+        /// 调度程序运行之间的延迟。
+        /// </param>
         public DelayedJobScheduler(TimeSpan pollingDelay)
             : this(pollingDelay, new BackgroundJobStateChanger())
         {

@@ -16,6 +16,9 @@
 
 namespace Hangfire
 {
+    /// <summary>
+    /// 全局配置
+    /// </summary>
     public class GlobalConfiguration : IGlobalConfiguration
     {
         public static IGlobalConfiguration Configuration { get; } = new GlobalConfiguration();

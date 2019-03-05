@@ -23,23 +23,24 @@ using Hangfire.States;
 namespace Hangfire
 {
     /// <summary>
-    /// Provides methods for creating all the types of background jobs and 
-    /// changing their states. Represents a default implementation of the 
-    /// <see cref="IBackgroundJobClient"/> interface.
+    /// Provides methods for creating all the types of background jobs and changing their states. 
+    /// 提供创建所有后台作业类型并更改其状态的方法。
+    /// Represents a default implementation of the <see cref="IBackgroundJobClient"/> interface.
     /// </summary>
     /// 
     /// <remarks>
-    /// <para>This class uses the <see cref="IBackgroundJobFactory"/> interface 
-    /// for creating background jobs and the <see cref="IBackgroundJobStateChanger"/> 
-    /// interface for changing their states. Please see documentation for those 
-    /// types and their implementations to learn the details.</para>
+    /// <para>
+    /// This class uses the <see cref="IBackgroundJobFactory"/> interface for creating background jobs and the <see cref="IBackgroundJobStateChanger"/> interface for changing their states. 
+    /// 该类使用IBackgroundJobFactory接口创建后台作业，使用IBackgroundJobStateChanger接口更改它们的状态。
+    /// Please see documentation for those types and their implementations to learn the details.
+    /// 有关这些类型及其实现的详细信息，请参阅文档。
+    /// </para>
     /// 
     /// <note type="warning">
-    /// Despite the fact that instance methods of this class are thread-safe,
-    /// most implementations of the <see cref="IState"/> interface are <b>neither
-    /// thread-safe, nor immutable</b>. Please create a new instance of a state 
-    /// class for each operation to avoid race conditions and unexpected side 
-    /// effects.
+    /// Despite the fact that instance methods of this class are thread-safe, most implementations of the <see cref="IState"/> interface are <b>neither thread-safe, nor immutable</b>. 
+    /// 尽管此类的实例方法是线程安全的，但IState接口的大多数实现既不是线程安全的，也不是不可变的。
+    /// Please create a new instance of a state class for each operation to avoid race conditions and unexpected side effects.
+    /// 请为每个操作创建一个状态类的新实例，以避免竞态条件和意外的副作用。
     /// </note>
     /// </remarks>
     /// 
@@ -103,7 +104,12 @@ namespace Hangfire
             _factory = factory;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="job"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public string Create(Job job, IState state)
         {
             if (job == null) throw new ArgumentNullException(nameof(job));

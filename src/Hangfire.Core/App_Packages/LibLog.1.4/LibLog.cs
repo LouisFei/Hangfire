@@ -39,16 +39,18 @@ namespace Hangfire.Logging
 
     /// <summary>
     /// Simple interface that represent a logger.
+    /// 表示记录器的简单接口。
     /// </summary>
     public interface ILog
     {
         /// <summary>
         /// Log a message the specified log level.
+        /// 将消息记录到指定的日志级别。
         /// </summary>
-        /// <param name="logLevel">The log level.</param>
+        /// <param name="logLevel">The log level.日志级别</param>
         /// <param name="messageFunc">The message function.</param>
-        /// <param name="exception">An optional exception.</param>
-        /// <returns>true if the message was logged. Otherwise false.</returns>
+        /// <param name="exception">An optional exception.可选的异常消息</param>
+        /// <returns>true if the message was logged. Otherwise false.成功记录返回true。</returns>
         /// <remarks>
         /// Note to implementers: the message func should not be called if the loglevel is not enabled
         /// so as not to incur performance penalties.
@@ -60,19 +62,42 @@ namespace Hangfire.Logging
 
     /// <summary>
     /// The log level.
+    /// 日志级别
     /// </summary>
     public enum LogLevel
     {
+        /// <summary>
+        /// 跟踪
+        /// </summary>
         Trace,
+        /// <summary>
+        /// 调试
+        /// </summary>
         Debug,
+        /// <summary>
+        /// 信息
+        /// </summary>
         Info,
+        /// <summary>
+        /// 警告
+        /// </summary>
         Warn,
+        /// <summary>
+        /// 错误
+        /// </summary>
         Error,
+        /// <summary>
+        /// 严重错误
+        /// </summary>
         Fatal
     }
 
+    /// <summary>
+    /// 日志扩展方法
+    /// </summary>
     public static class LogExtensions
     {
+        #region Is Enabled
         public static bool IsDebugEnabled(this ILog logger)
         {
             GuardAgainstNullLogger(logger);
@@ -108,7 +133,9 @@ namespace Hangfire.Logging
             GuardAgainstNullLogger(logger);
             return logger.Log(LogLevel.Warn, null);
         }
+        #endregion
 
+        #region Debug
         public static void Debug(this ILog logger, Func<string> messageFunc)
         {
             GuardAgainstNullLogger(logger);
@@ -138,7 +165,9 @@ namespace Hangfire.Logging
                 logger.Log(LogLevel.Debug, message.AsFunc(), exception);
             }
         }
+        #endregion
 
+        #region Error
         public static void Error(this ILog logger, Func<string> messageFunc)
         {
             logger.Log(LogLevel.Error, messageFunc);
@@ -167,7 +196,9 @@ namespace Hangfire.Logging
                 logger.Log(LogLevel.Error, message.AsFunc(), exception);
             }
         }
+        #endregion
 
+        #region Fatal
         public static void Fatal(this ILog logger, Func<string> messageFunc)
         {
             logger.Log(LogLevel.Fatal, messageFunc);
@@ -196,7 +227,9 @@ namespace Hangfire.Logging
                 logger.Log(LogLevel.Fatal, message.AsFunc(), exception);
             }
         }
+        #endregion
 
+        #region Info
         public static void Info(this ILog logger, Func<string> messageFunc)
         {
             GuardAgainstNullLogger(logger);
@@ -226,7 +259,9 @@ namespace Hangfire.Logging
                 logger.Log(LogLevel.Info, message.AsFunc(), exception);
             }
         }
+        #endregion
 
+        #region Trace
         public static void Trace(this ILog logger, Func<string> messageFunc)
         {
             GuardAgainstNullLogger(logger);
@@ -256,7 +291,9 @@ namespace Hangfire.Logging
                 logger.Log(LogLevel.Trace, message.AsFunc(), exception);
             }
         }
+        #endregion
 
+        #region Warn
         public static void Warn(this ILog logger, Func<string> messageFunc)
         {
             GuardAgainstNullLogger(logger);
@@ -286,7 +323,13 @@ namespace Hangfire.Logging
                 logger.Log(LogLevel.Warn, message.AsFunc(), exception);
             }
         }
+        #endregion
 
+        #region 帮助方法
+        /// <summary>
+        /// 防止为Null
+        /// </summary>
+        /// <param name="logger"></param>
         private static void GuardAgainstNullLogger(ILog logger)
         {
             if (logger == null)
@@ -295,7 +338,15 @@ namespace Hangfire.Logging
             }
         }
 
-        private static void LogFormat(this ILog logger, LogLevel logLevel, string message, params object[] args)
+        /// <summary>
+        /// 扩展支持消息格式化的方法
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="logLevel"></param>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        private static void LogFormat(this ILog logger, 
+            LogLevel logLevel, string message, params object[] args)
         {
             var result = string.Format(CultureInfo.InvariantCulture, message, args);
             logger.Log(logLevel, result.AsFunc());
@@ -311,10 +362,12 @@ namespace Hangfire.Logging
         {
             return value;
         }
+        #endregion
     }
 
     /// <summary>
     /// Represents a way to get a <see cref="ILog"/>
+    /// 记录器提供者接口
     /// </summary>
     public interface ILogProvider
     {
@@ -324,9 +377,13 @@ namespace Hangfire.Logging
 
     /// <summary>
     /// Provides a mechanism to create instances of <see cref="ILog" /> objects.
+    /// 提供一个创建具体记录器实例的机制。
     /// </summary>
     public static class LogProvider
     {
+        /// <summary>
+        /// 当前记录器提供者
+        /// </summary>
         private static ILogProvider _currentLogProvider;
 
         /// <summary>
@@ -374,6 +431,7 @@ namespace Hangfire.Logging
 
         /// <summary>
         /// Sets the current log provider.
+        /// 设置当前的日志记录器提供者
         /// </summary>
         /// <param name="logProvider">The log provider.</param>
         public static void SetCurrentLogProvider(ILogProvider logProvider)
@@ -420,6 +478,9 @@ namespace Hangfire.Logging
             return null;
         }
 
+        /// <summary>
+        /// 没有操作的记录器
+        /// </summary>
         internal class NoOpLogger : ILog
         {
             public bool Log(LogLevel logLevel, Func<string> messageFunc, Exception exception)
@@ -429,6 +490,9 @@ namespace Hangfire.Logging
         }
     }
 
+    /// <summary>
+    /// 记录器执行包装
+    /// </summary>
     internal class LoggerExecutionWrapper : ILog
     {
         private readonly ILog _logger;
@@ -478,6 +542,13 @@ namespace Hangfire.Logging.LogProviders
     using System.Reflection;
     using System.Text;
 
+    #region NLogLog提供者
+    /// <summary>
+    /// NLog提供者
+    /// </summary>
+    /// <remarks>
+    /// NLog是一个简单灵活的.NET日志记录类库
+    /// </remarks>
     public class NLogLogProvider : ILogProvider
     {
         private readonly Func<string, object> _getLoggerByNameDelegate;
@@ -659,7 +730,9 @@ namespace Hangfire.Logging.LogProviders
             }
         }
     }
+    #endregion
 
+    #region Log4Net提供者
     public class Log4NetLogProvider : ILogProvider
     {
         private readonly Func<string, object> _getLoggerByNameDelegate;
@@ -827,8 +900,13 @@ namespace Hangfire.Logging.LogProviders
             }
         }
     }
+    #endregion
 
+    #region EntLibLog提供者
 #if NETFULL
+    /// <summary>
+    /// EntLibLog 微信最佳实践提供的日志库
+    /// </summary>
     public class EntLibLogProvider : ILogProvider
     {
         private const string TypeTemplate = "Microsoft.Practices.EnterpriseLibrary.Logging.{0}, Microsoft.Practices.EnterpriseLibrary.Logging";
@@ -983,7 +1061,12 @@ namespace Hangfire.Logging.LogProviders
         }
     }
 #endif
+    #endregion
 
+    #region SerilogLog提供者***后续试用
+    /// <summary>
+    /// Serilog 是一个用于.NET应用程序的日志记录开源库，配置简单，接口干净
+    /// </summary>
     public class SerilogLogProvider : ILogProvider
     {
         private readonly Func<string, object> _getLoggerByNameDelegate;
@@ -1240,7 +1323,9 @@ namespace Hangfire.Logging.LogProviders
             }
         }
     }
+    #endregion
 
+    #region LoupeLog提供者
 #if NETFULL
     public class LoupeLogProvider : ILogProvider
     {
@@ -1368,7 +1453,12 @@ namespace Hangfire.Logging.LogProviders
             );
     }
 #endif
+    #endregion
 
+    #region 有颜色的控制台记录器 提供者
+    /// <summary>
+    /// 有颜色的控制台记录器
+    /// </summary>
     public class ColouredConsoleLogProvider : ILogProvider
     {
         static ColouredConsoleLogProvider()
@@ -1483,7 +1573,9 @@ namespace Hangfire.Logging.LogProviders
             }
         }
     }
+    #endregion
 
+    #region ElmahLog提供者***后续试用
 #if NETFULL
     public class ElmahLogProvider : ILogProvider
     {
@@ -1597,4 +1689,5 @@ namespace Hangfire.Logging.LogProviders
         }
     }
 #endif
+    #endregion
 }

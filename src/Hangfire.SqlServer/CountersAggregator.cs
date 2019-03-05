@@ -24,14 +24,19 @@ using Hangfire.Server;
 namespace Hangfire.SqlServer
 {
 #pragma warning disable 618
+    /// <summary>
+    /// 计数器
+    /// </summary>
     internal class CountersAggregator : IServerComponent
 #pragma warning restore 618
     {
         // This number should be high enough to aggregate counters efficiently,
         // but low enough to not to cause large amount of row locks to be taken.
         // Lock escalation to page locks may pause the background processing.
+        // 这个数字应该足够高，可以有效地聚合计数器，但是又足够低，不能导致占用大量的行锁。
+        // 锁定升级到页面锁定可能会暂停后台处理。
         private const int NumberOfRecordsInSinglePass = 1000;
-        private static readonly TimeSpan DelayBetweenPasses = TimeSpan.FromMilliseconds(500);
+        private static readonly TimeSpan DelayBetweenPasses = TimeSpan.FromMilliseconds(500); //500毫秒
 
         private readonly ILog _logger = LogProvider.For<CountersAggregator>();
         private readonly SqlServerStorage _storage;
@@ -69,7 +74,8 @@ namespace Hangfire.SqlServer
                 // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
             } while (removedCount >= NumberOfRecordsInSinglePass);
 
-            _logger.Trace("Records from the 'Counter' table aggregated.");
+            //_logger.Trace("Records from the 'Counter' table aggregated.");
+            _logger.Trace("'Counter'表中的记录汇总完成。");
 
             cancellationToken.Wait(_interval);
         }

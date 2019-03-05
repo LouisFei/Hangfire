@@ -21,6 +21,9 @@ using System.Data.SqlClient;
 
 namespace Hangfire.SqlServer
 {
+    /// <summary>
+    /// 批处理Sql命令
+    /// </summary>
     internal class SqlCommandBatch : IDisposable
     {
         private readonly List<DbCommand> _commandList = new List<DbCommand>();
@@ -43,7 +46,14 @@ namespace Hangfire.SqlServer
             }
         }
 
+        /// <summary>
+        /// 数据库连接
+        /// </summary>
         public DbConnection Connection { get; set; }
+
+        /// <summary>
+        /// 数据库事务
+        /// </summary>
         public DbTransaction Transaction { get; set; }
 
         public int? CommandTimeout { get; set; }
@@ -59,6 +69,11 @@ namespace Hangfire.SqlServer
             _commandSet?.Dispose();
         }
 
+        /// <summary>
+        /// 附加命令参数
+        /// </summary>
+        /// <param name="commandText"></param>
+        /// <param name="parameters"></param>
         public void Append(string commandText, params SqlParameter[] parameters)
         {
             var command = new SqlCommand(commandText);
@@ -71,6 +86,10 @@ namespace Hangfire.SqlServer
             Append(command);
         }
 
+        /// <summary>
+        /// 附加命令
+        /// </summary>
+        /// <param name="command"></param>
         public void Append(DbCommand command)
         {
             if (_commandSet != null && command is SqlCommand)
@@ -83,6 +102,9 @@ namespace Hangfire.SqlServer
             }
         }
 
+        /// <summary>
+        /// 执行命令（非查询命令）
+        /// </summary>
         public void ExecuteNonQuery()
         {
             if (_commandSet != null && _commandSet.CommandCount > 0)

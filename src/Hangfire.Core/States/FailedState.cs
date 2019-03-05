@@ -21,9 +21,8 @@ using Hangfire.Common;
 namespace Hangfire.States
 {
     /// <summary>
-    /// Defines the <i>intermediate</i> state of a background job when its processing 
-    /// was interrupted by an exception and it is a developer's responsibility
-    /// to decide what to do with it next.
+    /// Defines the <i>intermediate</i> state of a background job when its processing was interrupted by an exception and it is a developer's responsibility to decide what to do with it next.
+    /// 定义后台作业在处理被异常中断时的中间状态，开发人员有责任决定下一步如何处理它。
     /// </summary>
     /// <remarks>
     /// <para>Failed state is used in Hangfire when something went wrong and an exception

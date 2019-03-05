@@ -22,14 +22,33 @@ using Hangfire.Logging;
 
 namespace Hangfire.Server
 {
+    /// <summary>
+    /// 自动重试进程
+    /// </summary>
     internal class AutomaticRetryProcess : IBackgroundProcessWrapper
     {
+        /// <summary>
+        /// 默认的最大尝试延时，5分钟
+        /// </summary>
         private static readonly TimeSpan DefaultMaxAttemptDelay = TimeSpan.FromMinutes(5);
+        /// <summary>
+        /// 默认的最大重试次数
+        /// </summary>
         private const int DefaultMaxRetryAttempts = int.MaxValue;
 
+        /// <summary>
+        /// 内部进程
+        /// </summary>
         private readonly IServerProcess _innerProcess;
+        /// <summary>
+        /// 日志记录器
+        /// </summary>
         private readonly ILog _logger;
 
+        /// <summary>
+        /// 实例化自动重试进程对象
+        /// </summary>
+        /// <param name="innerProcess">内部进程</param>
         public AutomaticRetryProcess([NotNull] IServerProcess innerProcess)
         {
             if (innerProcess == null) throw new ArgumentNullException(nameof(innerProcess));
@@ -42,12 +61,27 @@ namespace Hangfire.Server
             DelayCallback = GetBackOffMultiplier;
         }
 
+        /// <summary>
+        /// 最大重试次数
+        /// </summary>
         public int MaxRetryAttempts { get; set; }
+        /// <summary>
+        /// 最大尝试延迟
+        /// </summary>
         public TimeSpan MaxAttemptDelay { get; set; }
+        /// <summary>
+        /// 延迟回调
+        /// </summary>
         public Func<int, TimeSpan> DelayCallback { get; set; }
-
+        /// <summary>
+        /// 内部进程
+        /// </summary>
         public IServerProcess InnerProcess => _innerProcess;
 
+        /// <summary>
+        /// 执行/处理
+        /// </summary>
+        /// <param name="context"></param>
         public void Execute(BackgroundProcessContext context)
         {
             for (var i = 0; i <= MaxRetryAttempts; i++)
@@ -86,6 +120,11 @@ namespace Hangfire.Server
             }
         }
 
+        /// <summary>
+        /// 日志级别
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
         private static LogLevel GetLogLevel(int i)
         {
             switch (i)

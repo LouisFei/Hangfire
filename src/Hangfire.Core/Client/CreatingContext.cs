@@ -19,8 +19,8 @@ using System;
 namespace Hangfire.Client
 {
     /// <summary>
-    /// Provides the context for the <see cref="IClientFilter.OnCreating"/>
-    /// method of the <see cref="IClientFilter"/> interface.
+    /// Provides the context for the <see cref="IClientFilter.OnCreating"/> method of the <see cref="IClientFilter"/> interface.
+    /// 创建中上下文
     /// </summary>
     public class CreatingContext : CreateContext
     {

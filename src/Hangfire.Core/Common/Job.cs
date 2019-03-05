@@ -26,45 +26,58 @@ using System.Threading.Tasks;
 namespace Hangfire.Common
 {
     /// <summary>
-    /// Represents an action that can be marshalled to another process to
-    /// be performed.
+    /// Represents an action that can be marshalled to another process to be performed.
+    /// 表示可以编组到要执行的另一个进程的操作。
     /// </summary>
-    /// 
     /// <remarks>
-    /// <para>The ability to serialize an action is the cornerstone of 
-    /// marshalling it outside of a current process boundaries. We are leaving 
-    /// behind all the tricky features, e.g. serializing lambdas with their
-    /// closures or so, and considering a simple method call information as 
-    /// a such an action, and using reflection to perform it.</para>
+    /// <para>
+    /// The ability to serialize an action is the cornerstone of marshalling it outside of a current process boundaries. 
+    /// 序列化操作的能力是在当前流程边界之外编组操作的基础。
+    /// We are leaving behind all the tricky features, e.g. serializing lambdas with their closures or so, 
+    /// 我们抛弃了所有棘手的特性，例如使用闭包序列化lambdas，
+    /// and considering a simple method call information as a such an action, and using reflection to perform it.
+    /// 并将一个简单的方法调用信息视为这样一个操作，并使用反射来执行它。
+    /// </para>
     /// 
-    /// <para>Reflection-based method invocation requires an instance of
-    /// the <see cref="MethodInfo"/> class, the arguments and an instance of 
-    /// the type on which to invoke the method (unless it is static). Since the
-    /// same <see cref="MethodInfo"/> instance can be shared across multiple 
-    /// types (especially when they are defined in interfaces), we also allow 
-    /// to specify a <see cref="Type"/> that contains the defined method 
-    /// explicitly for better flexibility.</para>
+    /// <para>
+    /// Reflection-based method invocation requires an instance of the <see cref="MethodInfo"/> class, 
+    /// 基于反射的方法调用需要一个MethodInfo类的实例，
+    /// the arguments and an instance of the type on which to invoke the method (unless it is static). 
+    /// 要调用方法的类型的参数和实例(除非它是静态的)。
+    /// Since the same <see cref="MethodInfo"/> instance can be shared across multiple types (especially when they are defined in interfaces), 
+    /// 由于相同的MethodInfo实例可以跨多个类型共享(特别是在接口中定义它们时)，
+    /// we also allow to specify a <see cref="Type"/> that contains the defined method explicitly for better flexibility.
+    /// 为了获得更好的灵活性，我们还允许指定显式包含已定义方法的类型。
+    /// </para>
     /// 
-    /// <para>Marshalling imposes restrictions on a method that should be 
-    /// performed:</para>
+    /// <para>
+    /// Marshalling imposes restrictions on a method that should be performed:
+    /// 编组对应该执行的方法施加了限制:
+    /// </para>
     /// 
     /// <list type="bullet">
-    ///     <item>Method should be public.</item>
-    ///     <item>Method should not contain <see langword="out"/> and <see langword="ref"/> parameters.</item>
-    ///     <item>Method should not contain open generic parameters.</item>
+    ///     <item>Method should be public. 方法应该是公共的。</item>
+    ///     <item>Method should not contain <see langword="out"/> and <see langword="ref"/> parameters. 方法不应包含out和ref参数。</item>
+    ///     <item>Method should not contain open generic parameters. 方法不应包含打开的泛型参数。</item>
     /// </list>
     /// </remarks>
     /// 
     /// <example>
-    /// <para>The following example demonstrates the creation of a <see cref="Job"/>
-    /// type instances using expression trees. This is the recommended way of
-    /// creating jobs.</para>
+    /// <para>
+    /// The following example demonstrates the creation of a <see cref="Job"/> type instances using expression trees. 
+    /// 下面的示例演示如何使用表达式树创建作业类型实例。
+    /// This is the recommended way of creating jobs.
+    /// 这是推荐的创造作业的方式。
+    /// </para>
     /// 
     /// <code lang="cs" source="..\Samples\Job.cs" region="Supported Methods" />
     /// 
-    /// <para>The next example demonstrates unsupported methods. Any attempt
-    /// to create a job based on these methods fails with 
-    /// <see cref="NotSupportedException"/>.</para>
+    /// <para>
+    /// The next example demonstrates unsupported methods. 
+    /// 下一个示例演示不受支持的方法。
+    /// Any attempt to create a job based on these methods fails with <see cref="NotSupportedException"/>.
+    /// 使用NotSupportedException创建作业的任何尝试都失败了。
+    /// </para>
     /// 
     /// <code lang="cs" source="..\Samples\Job.cs" region="Unsupported Methods" />
     /// </example>
@@ -203,9 +216,10 @@ namespace Hangfire.Common
                 .Cast<JobFilterAttribute>();
         }
 
+        #region FromExpression
         /// <summary>
-        /// Gets a new instance of the <see cref="Job"/> class based on the
-        /// given expression tree of a method call.
+        /// Gets a new instance of the <see cref="Job"/> class based on the given expression tree of a method call.
+        /// 获取基于方法调用的给定表达式树的<see cref="Job"/>类的新实例。
         /// </summary>
         /// 
         /// <param name="methodCall">Expression tree of a method call.</param>
@@ -270,11 +284,13 @@ namespace Hangfire.Common
         }
 
         /// <summary>
-        /// Gets a new instance of the <see cref="Job"/> class based on the
-        /// given expression tree of an instance method call with explicit
-        /// type specification.
+        /// Gets a new instance of the <see cref="Job"/> class based on the given expression tree of an instance method call with explicit type specification.
+        /// 根据具有显式类型规范的实例方法调用的给定表达式树获取作业类的新实例。
         /// </summary>
-        /// <typeparam name="TType">Explicit type that should be used on method call.</typeparam>
+        /// <typeparam name="TType">
+        /// Explicit type that should be used on method call.
+        /// 方法调用时应使用的显式类型。
+        /// </typeparam>
         /// <param name="methodCall">Expression tree of a method call on <typeparamref name="TType"/>.</param>
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="methodCall"/> is null.</exception>
@@ -285,9 +301,10 @@ namespace Hangfire.Common
         /// expression contains a method that is not supported.</exception>
         /// 
         /// <remarks>
-        /// <para>All the arguments are evaluated using the expression compiler
-        /// that uses caching where possible to decrease the performance 
-        /// penalty.</para>
+        /// <para>
+        /// All the arguments are evaluated using the expression compiler that uses caching where possible to decrease the performance penalty.
+        /// 所有参数都使用表达式编译器进行计算，该编译器在可能的情况下使用缓存来减少性能损失。
+        /// </para>
         /// </remarks>
         public static Job FromExpression<TType>([NotNull, InstantHandle] Expression<Action<TType>> methodCall)
         {
@@ -319,6 +336,12 @@ namespace Hangfire.Common
             return FromExpression(methodCall, typeof(TType));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="methodCall"></param>
+        /// <param name="explicitType">明确的类型</param>
+        /// <returns></returns>
         private static Job FromExpression([NotNull] LambdaExpression methodCall, [CanBeNull] Type explicitType)
         {
             if (methodCall == null) throw new ArgumentNullException(nameof(methodCall));
@@ -362,6 +385,7 @@ namespace Hangfire.Common
                 method,
                 GetExpressionValues(callExpression.Arguments));
         }
+        #endregion
 
         private static void Validate(
             Type type, 

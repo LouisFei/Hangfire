@@ -24,8 +24,16 @@ using Hangfire.Logging;
 
 namespace Hangfire.Server
 {
+    /// <summary>
+    /// 服务器进程扩展方法
+    /// </summary>
     internal static class ServerProcessExtensions
     {
+        /// <summary>
+        /// 执行进程
+        /// </summary>
+        /// <param name="process"></param>
+        /// <param name="context"></param>
         public static void Execute(this IServerProcess process, BackgroundProcessContext context)
         {
             if (!(process is IServerComponent || process is IBackgroundProcess))
@@ -45,6 +53,12 @@ namespace Hangfire.Server
             }
         }
 
+        /// <summary>
+        /// 创建.Net运行时任务
+        /// </summary>
+        /// <param name="process"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public static Task CreateTask([NotNull] this IServerProcess process, BackgroundProcessContext context)
         {
             if (process == null) throw new ArgumentNullException(nameof(process));
@@ -73,17 +87,24 @@ namespace Hangfire.Server
             return nextProcess.GetType();
         }
 
+        /// <summary>
+        /// 在当前进程中运行
+        /// </summary>
+        /// <param name="process"></param>
+        /// <param name="context"></param>
         private static void RunProcess(IServerProcess process, BackgroundProcessContext context)
         {
-            // Long-running tasks are based on custom threads (not threadpool ones) as in 
-            // .NET Framework 4.5, so we can try to set custom thread name to simplify the
-            // debugging experience.
+            // Long-running tasks are based on custom threads (not threadpool ones) as in .NET Framework 4.5, so we can try to set custom thread name to simplify the debugging experience.
+            // 与. net Framework 4.5中一样，长时间运行的任务基于自定义线程(而不是线程池线程)，因此我们可以尝试设置自定义线程名，以简化调试体验。
             TrySetThreadName(process.ToString());
 
-            // LogProvider.GetLogger does not throw any exception, that is why we are not
-            // using the `try` statement here. It does not return `null` value as well.
+            // LogProvider.GetLogger does not throw any exception, that is why we are not using the `try` statement here. 
+            // GetLogger不会抛出任何异常，这就是我们在这里不使用‘try’语句的原因。
+            // It does not return `null` value as well.
+            // 它也不返回' null '值。
             var logger = LogProvider.GetLogger(process.GetProcessType());
-            logger.Debug($"Background process '{process}' started.");
+            //logger.Debug($"Background process '{process}' started.");
+            logger.Debug($"后台进程 '{process}' 启动了。");
 
             try
             {
@@ -94,7 +115,8 @@ namespace Hangfire.Server
                 if (ex is OperationCanceledException && context.IsShutdownRequested)
                 {
                     // Graceful shutdown
-                    logger.Trace($"Background process '{process}' was stopped due to a shutdown request.");
+                    //logger.Trace($"Background process '{process}' was stopped due to a shutdown request.");
+                    logger.Trace($"后台进程 '{process}' 由于关闭请求而停止。");
                 }
                 else
                 {
@@ -104,9 +126,14 @@ namespace Hangfire.Server
                 }
             }
 
-            logger.Debug($"Background process '{process}' stopped.");
+            //logger.Debug($"Background process '{process}' stopped.");
+            logger.Debug($"后台进程 '{process}' 停止了。");
         }
 
+        /// <summary>
+        /// 尝试自定义线程名
+        /// </summary>
+        /// <param name="name"></param>
         private static void TrySetThreadName(string name)
         {
             try

@@ -24,14 +24,15 @@ using Newtonsoft.Json;
 namespace Hangfire.States
 {
     /// <summary>
-    /// Defines the <i>intermediate</i> state of a background job when it is placed 
-    /// on a schedule to be moved to the <see cref="EnqueuedState"/> in the future 
-    /// by <see cref="DelayedJobScheduler"/> background process.
+    /// Defines the <i>intermediate</i> state of a background job when it is placed on a schedule to be moved to the <see cref="EnqueuedState"/> in the future by <see cref="DelayedJobScheduler"/> background process.
+    /// 定义一个后台作业的中间状态，当它被放置在一个计划中，并由DelayedJobScheduler后台进程在将来移动到EnqueuedState时。
     /// </summary>
     /// 
     /// <remarks>
-    /// <para>Background job in <see cref="ScheduledState"/> is referred as
-    /// <b>delayed job</b>.</para>
+    /// <para>
+    /// Background job in <see cref="ScheduledState"/> is referred as <b>delayed job</b>.
+    /// ScheduledState中的后台作业称为延迟作业。
+    /// </para>
     /// </remarks>
     /// 
     /// <example>
@@ -53,6 +54,7 @@ namespace Hangfire.States
     {
         /// <summary>
         /// Represents the name of the <i>Scheduled</i> state. This field is read-only.
+        /// 表示计划状态的名称。该字段是只读的。
         /// </summary>
         /// <remarks>
         /// The value of this field is <c>"Scheduled"</c>.
@@ -60,12 +62,13 @@ namespace Hangfire.States
         public static readonly string StateName = "Scheduled";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ScheduledState"/> class
-        /// with the specified <i>time interval</i> after which a job should be moved to
-        /// the <see cref="EnqueuedState"/>.
+        /// Initializes a new instance of the <see cref="ScheduledState"/> class with the specified <i>time interval</i> after which a job should be moved to the <see cref="EnqueuedState"/>.
+        /// 使用指定的时间间隔初始化ScheduledState类的新实例，在此时间间隔之后，作业应该移动到EnqueuedState。
         /// </summary>
-        /// <param name="enqueueIn">The time interval after which a job will be
-        /// moved to the <see cref="EnqueuedState"/>.</param>
+        /// <param name="enqueueIn">
+        /// The time interval after which a job will be moved to the <see cref="EnqueuedState"/>.
+        /// 作业移动到EnqueuedState的时间间隔。
+        /// </param>
         public ScheduledState(TimeSpan enqueueIn)
             : this(DateTime.UtcNow.Add(enqueueIn))
         {

@@ -23,19 +23,23 @@ using Hangfire.States;
 namespace Hangfire
 {
     /// <summary>
-    /// Provides static methods for creating <i>fire-and-forget</i>, <i>delayed</i>
-    /// jobs and <i>continuations</i> as well as re-queue and delete existing
-    /// background jobs.
+    /// Provides static methods for creating <i>fire-and-forget</i>, <i>delayed</i> jobs and <i>continuations</i> as well as re-queue and delete existing background jobs.
+    /// 提供静态方法来创建<i>即发即忘</i>， <i>延迟</i>作业和<i>延续</i>以及重新排队和删除现有后台作业。
     /// </summary>
-    /// 
     /// <remarks>
-    /// <para>This class is a wrapper for the <see cref="IBackgroundJobClient"/> 
-    /// interface and its default implementation, <see cref="BackgroundJobClient"/>
-    /// class, that was created for the most simple scenarios. Please consider 
-    /// using the types above in real world applications.</para>
-    /// <para>This class also contains undocumented constructor and instance 
-    /// members. They are hidden to not to confuse new users. You can freely 
-    /// use them in low-level API.</para>
+    /// <para>This class is a wrapper for the <see cref="IBackgroundJobClient"/> interface 
+    /// 这个类是一个对IBackgroundJobClient接口的包装，
+    /// and its default implementation, <see cref="BackgroundJobClient"/> class, 
+    /// 它的默认实现是BackgroundJobClient类，
+    /// that was created for the most simple scenarios. 
+    /// 这是为最简单的场景创建的。
+    /// Please consider using the types above in real world applications.
+    /// 请考虑在实际应用程序中使用上述类型。</para>
+    /// <para>This class also contains undocumented constructor and instance members. 
+    /// 该类还包含无文档记录的构造函数和实例成员。
+    /// They are hidden to not to confuse new users. You can freely use them in low-level API.
+    /// 隐藏它们是为了不让新用户感到困惑。您可以在低级API中自由地使用它们。
+    /// </para>
     /// </remarks>
     /// 
     /// <seealso cref="IBackgroundJobClient"/>
@@ -71,16 +75,22 @@ namespace Hangfire
             }
         }
 
+        #region Enqueue
         /// <summary>
         /// Creates a new fire-and-forget job based on a given method call expression.
+        /// 基于给定的方法调用表达式创建一个新的“即发即忘”作业。
         /// </summary>
-        /// <param name="methodCall">Method call expression that will be marshalled to a server.</param>
-        /// <returns>Unique identifier of a background job.</returns>
-        /// 
+        /// <param name="methodCall">
+        /// Method call expression that will be marshalled to a server.
+        /// 将编组到服务器的方法调用表达式。
+        /// </param>
+        /// <returns>
+        /// Unique identifier of a background job.
+        /// 后台作业的唯一标识符。
+        /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="methodCall"/> is <see langword="null"/>.
         /// </exception>
-        /// 
         /// <seealso cref="EnqueuedState"/>
         /// <seealso cref="O:Hangfire.IBackgroundJobClient.Enqueue"/>
         public static string Enqueue([NotNull, InstantHandle] Expression<Action> methodCall)
@@ -91,6 +101,7 @@ namespace Hangfire
 
         /// <summary>
         /// Creates a new fire-and-forget job based on a given method call expression.
+        /// 基于给定的方法调用表达式创建一个新的“即发即忘”作业。
         /// </summary>
         /// <param name="methodCall">Method call expression that will be marshalled to a server.</param>
         /// <returns>Unique identifier of a background job.</returns>
@@ -109,8 +120,13 @@ namespace Hangfire
 
         /// <summary>
         /// Creates a new fire-and-forget job based on a given method call expression.
+        /// 基于给定的方法调用表达式创建一个新的“即发即忘”作业。
         /// </summary>
-        /// <param name="methodCall">Method call expression that will be marshalled to a server.</param>
+        /// <typeparam name="T">方法调用中的参数类型</typeparam>
+        /// <param name="methodCall">
+        /// Method call expression that will be marshalled to a server.
+        /// 将编组到服务器的方法调用表达式。
+        /// </param>
         /// <returns>Unique identifier of a background job.</returns>
         /// 
         /// <exception cref="ArgumentNullException">
@@ -127,6 +143,7 @@ namespace Hangfire
 
         /// <summary>
         /// Creates a new fire-and-forget job based on a given method call expression.
+        /// 基于给定的方法调用表达式创建一个新的“即发即忘”作业。
         /// </summary>
         /// <param name="methodCall">Method call expression that will be marshalled to a server.</param>
         /// <returns>Unique identifier of a background job.</returns>
@@ -142,12 +159,13 @@ namespace Hangfire
             var client = ClientFactory();
             return client.Enqueue(methodCall);
         }
+        #endregion
 
+        #region Schedule
         /// <summary>
-        /// Creates a new background job based on a specified method
-        /// call expression and schedules it to be enqueued after a given delay.
+        /// Creates a new background job based on a specified method call expression and schedules it to be enqueued after a given delay.
+        /// 基于指定的方法调用表达式创建一个新的后台作业，并在给定的延迟后将其排入队列。
         /// </summary>
-        /// 
         /// <param name="methodCall">Instance method call expression that will be marshalled to the Server.</param>
         /// <param name="delay">Delay, after which the job will be enqueued.</param>
         /// <returns>Unique identifier of the created job.</returns>
@@ -160,12 +178,17 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Creates a new background job based on a specified method
-        /// call expression and schedules it to be enqueued after a given delay.
+        /// Creates a new background job based on a specified method call expression and schedules it to be enqueued after a given delay.
+        /// 基于指定的方法调用表达式创建一个新的后台作业，并在给定的延迟后将其排入队列。
         /// </summary>
-        /// 
-        /// <param name="methodCall">Instance method call expression that will be marshalled to the Server.</param>
-        /// <param name="delay">Delay, after which the job will be enqueued.</param>
+        /// <param name="methodCall">
+        /// Instance method call expression that will be marshalled to the Server.
+        /// 将编组到服务器的实例方法调用表达式。
+        /// </param>
+        /// <param name="delay">
+        /// Delay, after which the job will be enqueued.
+        /// 延迟，之后作业将被加入队列。
+        /// </param>
         /// <returns>Unique identifier of the created job.</returns>
         public static string Schedule(
             [NotNull, InstantHandle] Expression<Func<Task>> methodCall,
@@ -176,12 +199,14 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Creates a new background job based on a specified method call expression
-        /// and schedules it to be enqueued at the given moment of time.
+        /// Creates a new background job based on a specified method call expression and schedules it to be enqueued at the given moment of time.
+        /// 根据指定的方法调用表达式创建一个新的后台作业，并将其安排在给定时刻排队。
         /// </summary>
-        /// 
         /// <param name="methodCall">Method call expression that will be marshalled to the Server.</param>
-        /// <param name="enqueueAt">The moment of time at which the job will be enqueued.</param>
+        /// <param name="enqueueAt">
+        /// The moment of time at which the job will be enqueued.
+        /// 作业排队的时刻。
+        /// </param>
         /// <returns>Unique identifier of a created job.</returns>
         public static string Schedule(
             [NotNull, InstantHandle] Expression<Action> methodCall, 
@@ -192,8 +217,7 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Creates a new background job based on a specified method call expression
-        /// and schedules it to be enqueued at the given moment of time.
+        /// Creates a new background job based on a specified method call expression and schedules it to be enqueued at the given moment of time.
         /// </summary>
         /// 
         /// <param name="methodCall">Method call expression that will be marshalled to the Server.</param>
@@ -208,14 +232,25 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Creates a new background job based on a specified instance method
-        /// call expression and schedules it to be enqueued after a given delay.
+        /// Creates a new background job based on a specified instance method call expression and schedules it to be enqueued after a given delay.
+        /// 基于指定的实例方法调用表达式创建一个新的后台作业，并在给定的延迟后将其排入队列。
         /// </summary>
-        /// 
-        /// <typeparam name="T">Type whose method will be invoked during job processing.</typeparam>
-        /// <param name="methodCall">Instance method call expression that will be marshalled to the Server.</param>
-        /// <param name="delay">Delay, after which the job will be enqueued.</param>
-        /// <returns>Unique identifier of the created job.</returns>
+        /// <typeparam name="T">
+        /// Type whose method will be invoked during job processing.
+        /// 类型，其方法将在作业处理期间调用。
+        /// </typeparam>
+        /// <param name="methodCall">
+        /// Instance method call expression that will be marshalled to the Server.
+        /// 将编组到服务器的实例方法调用表达式。
+        /// </param>
+        /// <param name="delay">
+        /// Delay, after which the job will be enqueued.
+        /// 延迟，在此之后作业将进入队列。
+        /// </param>
+        /// <returns>
+        /// Unique identifier of the created job.
+        /// 所创建作业的唯一标识符。
+        /// </returns>
         public static string Schedule<T>(
             [NotNull, InstantHandle] Expression<Action<T>> methodCall, 
             TimeSpan delay)
@@ -274,14 +309,19 @@ namespace Hangfire
             var client = ClientFactory();
             return client.Schedule(methodCall, enqueueAt);
         }
+        #endregion
 
+        #region Delete
         /// <summary>
-        /// Changes state of a job with the specified <paramref name="jobId"/>
-        /// to the <see cref="DeletedState"/>. 
+        /// Changes state of a job with the specified <paramref name="jobId"/> to the <see cref="DeletedState"/>. 
+        /// 将指定的<paramref name="jobId"/>作业状态更改为<see cref="DeletedState"/>。
         /// <seealso cref="BackgroundJobClientExtensions.Delete(IBackgroundJobClient, string)"/>
         /// </summary>
         /// 
-        /// <param name="jobId">An identifier, that will be used to find a job.</param>
+        /// <param name="jobId">
+        /// An identifier, that will be used to find a job.
+        /// 用于查找作业的标识符。
+        /// </param>
         /// <returns>True on a successfull state transition, false otherwise.</returns>
         public static bool Delete([NotNull] string jobId)
         {
@@ -290,9 +330,10 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Changes state of a job with the specified <paramref name="jobId"/>
-        /// to the <see cref="DeletedState"/>. State change is only performed
-        /// if current job state is equal to the <paramref name="fromState"/> value.
+        /// Changes state of a job with the specified <paramref name="jobId"/> to the <see cref="DeletedState"/>. 
+        /// 将指定的<paramref name="jobId"/>作业状态更改为<see cref="DeletedState"/>。
+        /// State change is only performed if current job state is equal to the <paramref name="fromState"/> value.
+        /// 只有当当前作业状态等于<paramref name="fromState"/>值时，才会执行状态更改。
         /// <seealso cref="BackgroundJobClientExtensions.Delete(IBackgroundJobClient, string, string)"/>
         /// </summary>
         /// 
@@ -304,10 +345,12 @@ namespace Hangfire
             var client = ClientFactory();
             return client.Delete(jobId, fromState);
         }
-        
+        #endregion
+
+        #region Requeue
         /// <summary>
-        /// Changes state of a job with the specified <paramref name="jobId"/>
-        /// to the <see cref="EnqueuedState"/>.
+        /// Changes state of a job with the specified <paramref name="jobId"/> to the <see cref="EnqueuedState"/>.
+        /// 将指定的<paramref name="jobId"/>作业状态更改为<see cref="EnqueuedState"/>。
         /// </summary>
         /// 
         /// <param name="jobId">Identifier of job, whose state is being changed.</param>
@@ -333,13 +376,21 @@ namespace Hangfire
             var client = ClientFactory();
             return client.Requeue(jobId, fromState);
         }
+        #endregion
 
+        #region ContinueWith
         /// <summary>
-        /// Creates a new background job that will wait for a successful completion 
-        /// of another background job to be enqueued.
+        /// Creates a new background job that will wait for a successful completion of another background job to be enqueued.
+        /// 创建一个新的后台作业，该作业将等待另一个后台作业成功完成后加入队列。
         /// </summary>
-        /// <param name="parentId">Identifier of a background job to wait completion for.</param>
-        /// <param name="methodCall">Method call expression that will be marshalled to a server.</param>
+        /// <param name="parentId">
+        /// Identifier of a background job to wait completion for.
+        /// 要等待完成的后台作业的标识符。
+        /// </param>
+        /// <param name="methodCall">
+        /// Method call expression that will be marshalled to a server.
+        /// 将编组到服务器的方法调用表达式。
+        /// </param>
         /// <returns>Unique identifier of a created job.</returns>
         public static string ContinueWith(
             [NotNull] string parentId, 
@@ -350,8 +401,8 @@ namespace Hangfire
         }
 
         /// <summary>
-        /// Creates a new background job that will wait for a successful completion 
-        /// of another background job to be enqueued.
+        /// Creates a new background job that will wait for a successful completion of another background job to be enqueued.
+        /// 创建一个新的后台作业，该作业将等待另一个后台作业的成功完成来排队。
         /// </summary>
         /// <param name="parentId">Identifier of a background job to wait completion for.</param>
         /// <param name="methodCall">Method call expression that will be marshalled to a server.</param>
@@ -429,5 +480,6 @@ namespace Hangfire
             var client = ClientFactory();
             return client.ContinueWith(parentId, methodCall, options: options);
         }
+        #endregion
     }
 }

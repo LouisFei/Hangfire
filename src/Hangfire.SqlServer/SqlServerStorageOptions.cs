@@ -23,9 +23,15 @@ using System.Data;
 
 namespace Hangfire.SqlServer
 {
+    /// <summary>
+    /// SqlServer仓库设置
+    /// </summary>
     public class SqlServerStorageOptions
     {
         private TimeSpan _queuePollInterval;
+        /// <summary>
+        /// 表名前缀
+        /// </summary>
         private string _schemaName;
         private TimeSpan? _slidingInvisibilityTimeout;
 
@@ -84,6 +90,9 @@ namespace Hangfire.SqlServer
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool PrepareSchemaIfNecessary { get; set; }
 
         public TimeSpan JobExpirationCheckInterval { get; set; }
@@ -94,6 +103,9 @@ namespace Hangfire.SqlServer
         public TimeSpan? CommandTimeout { get; set; }
         public TimeSpan? CommandBatchMaxTimeout { get; set; }
 
+        /// <summary>
+        /// 表名前缀
+        /// </summary>
         public string SchemaName
         {
             get { return _schemaName; }

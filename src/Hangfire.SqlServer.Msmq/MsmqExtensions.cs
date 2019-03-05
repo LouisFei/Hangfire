@@ -23,6 +23,13 @@ namespace Hangfire
 {
     public static class MsmqExtensions
     {
+        /// <summary>
+        /// 使用微软消息队列
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="pathPattern"></param>
+        /// <param name="queues"></param>
+        /// <returns></returns>
         public static IGlobalConfiguration<SqlServerStorage> UseMsmqQueues(
             this IGlobalConfiguration<SqlServerStorage> configuration,
             string pathPattern, 

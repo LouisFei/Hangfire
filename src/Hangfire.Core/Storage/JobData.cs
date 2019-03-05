@@ -1,5 +1,5 @@
-// This file is part of Hangfire.
-// Copyright � 2013-2014 Sergey Odinokov.
+﻿// This file is part of Hangfire.
+// Copyright ?2013-2014 Sergey Odinokov.
 // 
 // Hangfire is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as 
@@ -19,10 +19,16 @@ using Hangfire.Common;
 
 namespace Hangfire.Storage
 {
+    /// <summary>
+    /// 任务数据类
+    /// </summary>
     public class JobData
     {
         public string State { get; set; }
         public Job Job { get; set; }
+        /// <summary>
+        /// 创建时间
+        /// </summary>
         public DateTime CreatedAt { get; set; }
 
         public JobLoadException LoadException { get; set; }
