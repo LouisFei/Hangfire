@@ -21,6 +21,9 @@ using Hangfire.SqlServer;
 // ReSharper disable once CheckNamespace
 namespace Hangfire
 {
+    /// <summary>
+    /// SqlServer仓储扩展方法
+    /// </summary>
     public static class SqlServerStorageExtensions
     {
         /// <summary>

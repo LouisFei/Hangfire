@@ -52,7 +52,8 @@ namespace Hangfire.SqlServer
 
         public void Execute(CancellationToken cancellationToken)
         {
-            _logger.Debug("Aggregating records in 'Counter' table...");
+            //_logger.Debug("Aggregating records in 'Counter' table...");
+            _logger.Debug("汇总“Counter”表中的记录……");
 
             int removedCount = 0;
 

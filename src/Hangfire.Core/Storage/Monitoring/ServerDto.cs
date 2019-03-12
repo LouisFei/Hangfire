@@ -19,6 +19,9 @@ using System.Collections.Generic;
 
 namespace Hangfire.Storage.Monitoring
 {
+    /// <summary>
+    /// 服务器
+    /// </summary>
     public class ServerDto
     {
         public string Name { get; set; }

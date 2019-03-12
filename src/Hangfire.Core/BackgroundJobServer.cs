@@ -161,14 +161,16 @@ namespace Hangfire
 
         public void SendStop()
         {
-            _logger.Debug("Hangfire Server is stopping...");
+            //_logger.Debug("Hangfire Server is stopping...");
+            _logger.Debug("Hangfire服务停止中...");
             _processingServer.SendStop();
         }
 
         public void Dispose()
         {
             _processingServer.Dispose();
-            _logger.Info("Hangfire Server stopped.");
+            //_logger.Info("Hangfire Server stopped.");
+            _logger.Info("Hangfire服务停止.");
         }
 
         private IEnumerable<IBackgroundProcess> GetRequiredProcesses(

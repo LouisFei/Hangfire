@@ -23,6 +23,9 @@ using Hangfire.Storage;
 
 namespace Hangfire.Dashboard
 {
+    /// <summary>
+    /// 仪表盘指标
+    /// </summary>
     public static class DashboardMetrics
     {
         private static readonly Dictionary<string, DashboardMetric> Metrics = new Dictionary<string, DashboardMetric>();

@@ -29,7 +29,7 @@ namespace ConsoleSample
 
             var options = new BackgroundJobServerOptions
             {
-                //Queues = new[] { "critical", "default" }, //队列名称，只能小写字母
+                Queues = new[] { "critical", "default" }, //队列名称，只能小写字母
                 //WorkerCount = Environment.ProcessorCount * 5, //并发任务数
                 //ServerName = "hangfire1", //服务器名称
             };
